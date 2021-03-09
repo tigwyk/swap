@@ -28,7 +28,7 @@ export default function NanoBanano() {
         <Link href="https://gonano.dev/payment/new">
         <a className={styles.card}>
         <h3>Buy BANANO&rarr;</h3>
-        <p>@ (BANANO/NANO rate)</p>
+        <p>@ {props.price}</p>
         </a>
         </Link> 
         <Link href="#">
