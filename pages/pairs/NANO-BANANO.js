@@ -2,7 +2,7 @@ import Link from 'next/link'
 import styles from '../../styles/Pairs.module.css'
 
 export async function getStaticProps(context) {
-  const res = await fetch(`https://theswap.vercel.app/api/nano-banano`)
+  const res = await fetch("https://localhost/api/nano-banano")
   const data = await res.json()
 
   if (!data) {
