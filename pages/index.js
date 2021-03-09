@@ -27,8 +27,6 @@ export default function Home() {
         <div className={styles.grid}>
           <PairCard first="NANO" second="BANANO"/>
           <PairCard first="BANANO" second="MOON" />
-          <PairCard first="PLACE" second="HOLDER" />
-          <PairCard first="NOT" second="REAL" />
         </div>
       </main>
 
