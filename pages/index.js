@@ -2,11 +2,20 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 
+function PairCard(props) {
+  return <Link href={"/pairs/"+props.first+"-"+props.second}>
+  <a className={styles.card}>
+  <h3>{props.first}/{props.second} &rarr;</h3>
+  <p>Swap {props.first}/{props.second}</p>
+  </a>
+  </Link> 
+};
+
 export default function Home() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>The Swap</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -16,30 +25,10 @@ export default function Home() {
         </h1>
 
         <div className={styles.grid}>
-          <Link href="/pairs/nano-banano">
-            <a className={styles.card}>
-            <h3>NANO/BANANO &rarr;</h3>
-            <p>Swap NANO/BANANO</p>
-            </a>
-            </Link>
-          <Link href="/pairs/banano-moon" className={styles.card}>
-          <a className={styles.card}>
-            <h3>BANANO/MOON &rarr;</h3>
-            <p>Swap BANANO/MOON</p>
-            </a>
-            </Link>
-          <Link href="#" className={styles.card}>
-          <a className={styles.card}>
-            <h3>NANO/BANANO &rarr;</h3>
-            <p>Swap NANO/BANANO</p>
-            </a>
-            </Link>
-          <Link href="#"  className={styles.card}>
-          <a className={styles.card}>
-            <h3>NANO/BANANO &rarr;</h3>
-            <p>Swap NANO/BANANO</p>
-            </a>
-            </Link>
+          <PairCard first="NANO" second="BANANO"/>
+          <PairCard first="BANANO" second="MOON" />
+          <PairCard first="PLACE" second="HOLDER" />
+          <PairCard first="NOT" second="REAL" />
         </div>
       </main>
 
