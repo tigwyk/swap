@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import styles from '../../styles/Pairs.module.css'
 
-/*
+
 export async function getStaticProps(context) {
   const res = await fetch(`https://theswap.vercel.app/api/nano-banano`)
   const data = await res.json()
@@ -16,7 +16,7 @@ export async function getStaticProps(context) {
     props: {}, 
   }
 }
-*/
+
 export default function NanoBanano() {
   return (
     <>
