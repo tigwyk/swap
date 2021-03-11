@@ -8,8 +8,12 @@
     "start": "next start"
   },
   "dependencies": {
+    "banano-unit-converter": "^0.1.0",
+    "banano-uri-generator": "^0.1.0",
     "next": "10.0.8",
+    "qrcode.react": "^1.0.1",
     "react": "17.0.1",
-    "react-dom": "17.0.1"
+    "react-dom": "17.0.1",
+    "serverless-mysql": "^1.5.4"
   }
 }

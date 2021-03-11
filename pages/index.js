@@ -47,7 +47,6 @@ export async function getStaticProps(context) {
     'Accept': 'application/json'
    }});
   const data = await res.json();
-  console.log(data);
 
   const prices = { 
     "sell": {
@@ -70,9 +69,6 @@ export async function getStaticProps(context) {
       }
     }
     };
-
-  console.log(prices.nanobanano);
-  console.log(prices.bananonano);
 
   if (!data) {
     return {
