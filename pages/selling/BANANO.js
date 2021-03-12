@@ -10,6 +10,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function SellingBanano({data}) {
   
   const { prices, error } = useSWR('/api/prices', fetcher);
+  const generated_address = useSWR('/api/generate', fetcher);
   if (error) return <div>Failed to load</div>
   if (!prices) return <div>Loading...</div>
   console.log(prices);
@@ -25,6 +26,11 @@ export default function SellingBanano({data}) {
         console.log("Address is in valid format");
         if(!knownAddress) {
           console.log("New address, doesn't match");
+          return (
+            <>
+            <p>{generated_address}</p>
+            </>
+          );
         } else {
           console.log("We recognize this address! Let's lookup the previous counter-address");
         }
@@ -51,7 +57,6 @@ export default function SellingBanano({data}) {
 };
 
 export async function getServerSideProps(context) {
-  const generated_address = (await fetch('/api/generate')).json();
   const data = {
     "id":"banano-button",
     "title":"Confirm",
