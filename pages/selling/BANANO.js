@@ -3,17 +3,17 @@ import styles from '../../styles/Pairs.module.css'
 import BananoButton from '../../components/BananoButton'
 //import ExchangeRate from '../../components/ExchangeRate'
 import * as nanocurrency from 'nanocurrency';
-//import useSWR from 'swr';
+import useSWR from 'swr';
 
-//const fetcher = (url) => fetch(url).then((res) => res.json());
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function SellingBanano({data}) {
-  /*
+  
   const { prices, error } = useSWR('/api/prices', fetcher);
   if (error) return <div>Failed to load</div>
   if (!prices) return <div>Loading...</div>
   //console.log(data);
-*/
+
 
   const submitAddress = address => {
     console.log(address);
@@ -23,10 +23,11 @@ export default function SellingBanano({data}) {
       //console.log(this.state.nano_address);
       if(nanocurrency.checkAddress(nano_address)) {
         console.log("Address is in valid format");
-        if(!knownAddress)
+        if(!knownAddress) {
           console.log("New address, doesn't match");
-        else
+        } else {
           console.log("We recognize this address! Let's lookup the previous counter-address");
+        }
         //event.target.banano_button.setState({ showButton: false, showQR: true });
       }
   }
