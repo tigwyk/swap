@@ -26,11 +26,6 @@ export default function SellingBanano({data}) {
         console.log("Address is in valid format");
         if(!knownAddress) {
           console.log("New address, doesn't match");
-          return (
-            <>
-            <p>{generated_address}</p>
-            </>
-          );
         } else {
           console.log("We recognize this address! Let's lookup the previous counter-address");
         }
