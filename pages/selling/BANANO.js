@@ -10,7 +10,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function SellingBanano({data}) {
   
   const { prices, error } = useSWR('/api/prices', fetcher);
-  const {generated_address} = useSWR('/api/generate', fetcher);
+  //const {generated_address} = useSWR('/api/generate', fetcher);
   if (error) return <div>Failed to load</div>
   if (!prices) return <div>Loading...</div>
   console.log(prices);
