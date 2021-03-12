@@ -12,7 +12,7 @@ export default function SellingBanano({data}) {
   const { prices, error } = useSWR('/api/prices', fetcher);
   if (error) return <div>Failed to load</div>
   if (!prices) return <div>Loading...</div>
-  //console.log(data);
+  console.log(prices);
 
 
   const submitAddress = address => {
@@ -51,7 +51,7 @@ export default function SellingBanano({data}) {
 };
 
 export async function getServerSideProps(context) {
-  
+  const generated_address = (await fetch('/api/generate')).json();
   const data = {
     "id":"banano-button",
     "title":"Confirm",
