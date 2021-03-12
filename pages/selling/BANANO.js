@@ -1,29 +1,51 @@
 import Link from 'next/link'
 import styles from '../../styles/Pairs.module.css'
 import BananoButton from '../../components/BananoButton'
+import * as nanocurrency from 'nanocurrency';
+import insertAddressPair from '../../libs/db';
+import findAddress from '../../libs/db';
 
-export default function SellingBanano({data}) {
+export default function SellingBanano({data,rates}) {
+  //console.log(data);
+  const submitAddress = address => {
+    console.log(address);
+    //event.preventDefault() // don't redirect the page
+    var nano_address = address;
+    var knownAddress;
+      //console.log(this.state.nano_address);
+      if(nanocurrency.checkAddress(nano_address)) {
+        console.log("Address is in valid format");
+        findAddress(nano_address).then( known_address => {
+          console.log(known_address);
+          data.address = known_address;
+          knownAddress = true;
+        }).catch(error => {
+          console.error(error);
+        });
+        if(!knownAddress)
+          console.log("New address, doesn't match");
+        else
+          console.log("We recognize this address! Let's lookup the previous counter-address");
+        //event.target.banano_button.setState({ showButton: false, showQR: true });
+      }
+  }
+
   return (
     <>
       <main className={styles.main}>
         <h3 className={styles.title}>
           Sell BANANO
         </h3>
-        <form action="/api/sell" method="POST">
-        <div className="input-group">
-<input className="form-label" type="text" name="coin_address_block" placeholder="nano_" autoComplete="on" required="" pattern="^[nano|xrb]_[13][0-13-9a-km-uw-z]{59}$" size="75"/>
-<BananoButton data={data} type="submit"/>
-</div>
-</form>
-        
+        <div>
+<BananoButton data={data} submitAddress={submitAddress}/>
+        </div>
         <Link href="/"><a>Back to home</a></Link>
         </main>
       <footer className={styles.footer}>
       </footer>
     </>
   )
-}
-
+};
 
 export async function getServerSideProps(context) {
   
@@ -40,6 +62,8 @@ export async function getServerSideProps(context) {
     "qr-bg":"#FFFFFF"
   };
   console.log(data);
+  var rates = {"nano":0.123};
+
 
   if (!data) {
     return {
@@ -50,6 +74,7 @@ export async function getServerSideProps(context) {
   return {
     props: { 
       data,
+      rates
      }, 
   }
 }

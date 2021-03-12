@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import QRCode from 'qrcode.react';
 import { getSendURI } from 'banano-uri-generator';
 import { banToRaw } from 'banano-unit-converter';
+import * as nanocurrency from 'nanocurrency';
 
 class BananoButton extends React.Component {
   constructor(props) {
@@ -69,7 +70,7 @@ class BananoButton extends React.Component {
     const {
       data
     } = this.props;
-
+    //console.log(this.props);
     const styles = {
       color: data.qrFg,
       marginLeft: 8
@@ -81,16 +82,26 @@ class BananoButton extends React.Component {
     } = this.state;
 
     const onPayment = () => {
-      this.setState({ showButton: false, showQR: true });
+      if(nanocurrency.checkAddress(this.state.nano_address)) {
+        this.setState({ showButton: false, showQR: true });
+        this.props.submitAddress(this.state.nano_address);
+      }
     }
 
     const amount = data.amount ? banToRaw(data.amount) : '',
           label = data.label ? data.label : '',
           bananoURI = getSendURI(data.address, amount, label);
 
+    const handleChange = (e) => {
+      //console.log(e.target.coin_address_block.value);
+      if(nanocurrency.checkAddress(e.target.value))
+        this.setState({nano_address: e.target.value});
+    };
     return (
-      <div>
-        {showButton && <button onClick={onPayment} type="submit">
+
+      <div className="input-group">
+        {showButton && <input className="form-control" type="text" name="coin_address_block" placeholder="nano_" autoComplete="on" pattern="^[nano]_[13][0-13-9a-km-uw-z]{59}$" size="75" required onChange={handleChange}/>}
+        {showButton && <button onClick={onPayment} type="submit" className="btn btn-primary" name="banano_button">
           {data.title ? data.title : 'Pay with BAN'}
           </button>}
             {showQR && <QRCode

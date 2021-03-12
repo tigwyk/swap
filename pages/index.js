@@ -17,7 +17,6 @@ export default function Home({prices,data}) {
 
         <div className={styles.grid}>
           <PairCard quote="NANO" base="BANANO" buy={prices.buy.banano.nano} sell={prices.sell.banano.nano}></PairCard>
-          <PairCard quote="NANO" base="MOON" buy={prices.buy.moon.nano} sell={prices.sell.moon.nano}></PairCard>
         </div>
       </main>
 
