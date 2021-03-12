@@ -1,12 +1,20 @@
 import Link from 'next/link'
 import styles from '../../styles/Pairs.module.css'
 import BananoButton from '../../components/BananoButton'
+//import ExchangeRate from '../../components/ExchangeRate'
 import * as nanocurrency from 'nanocurrency';
-import insertAddressPair from '../../libs/db';
-import findAddress from '../../libs/db';
+//import useSWR from 'swr';
 
-export default function SellingBanano({data,rates}) {
+//const fetcher = (url) => fetch(url).then((res) => res.json());
+
+export default function SellingBanano({data}) {
+  /*
+  const { prices, error } = useSWR('/api/prices', fetcher);
+  if (error) return <div>Failed to load</div>
+  if (!prices) return <div>Loading...</div>
   //console.log(data);
+*/
+
   const submitAddress = address => {
     console.log(address);
     //event.preventDefault() // don't redirect the page
@@ -15,13 +23,6 @@ export default function SellingBanano({data,rates}) {
       //console.log(this.state.nano_address);
       if(nanocurrency.checkAddress(nano_address)) {
         console.log("Address is in valid format");
-        findAddress(nano_address).then( known_address => {
-          console.log(known_address);
-          data.address = known_address;
-          knownAddress = true;
-        }).catch(error => {
-          console.error(error);
-        });
         if(!knownAddress)
           console.log("New address, doesn't match");
         else
@@ -37,6 +38,11 @@ export default function SellingBanano({data,rates}) {
           Sell BANANO
         </h3>
         <div>
+          <ul>
+          {prices.map((p,i) => (
+          <ExchangeRate currency={p} />
+          ))}
+          </ul>
 <BananoButton data={data} submitAddress={submitAddress}/>
         </div>
         <Link href="/"><a>Back to home</a></Link>
@@ -61,10 +67,7 @@ export async function getServerSideProps(context) {
     "qr-fg":"#000000",
     "qr-bg":"#FFFFFF"
   };
-  console.log(data);
-  var rates = {"nano":0.123};
-
-
+  
   if (!data) {
     return {
       notFound: true,
@@ -74,7 +77,6 @@ export async function getServerSideProps(context) {
   return {
     props: { 
       data,
-      rates
      }, 
   }
 }
