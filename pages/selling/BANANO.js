@@ -38,11 +38,6 @@ export default function SellingBanano({data}) {
           Sell BANANO
         </h3>
         <div>
-          <ul>
-          {prices.map((p,i) => (
-          <ExchangeRate currency={p} />
-          ))}
-          </ul>
 <BananoButton data={data} submitAddress={submitAddress}/>
         </div>
         <Link href="/"><a>Back to home</a></Link>
