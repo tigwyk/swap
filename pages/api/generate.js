@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 export default function handler (req, res) {
-    fetch('http://ec2-34-226-15-179.compute-1.amazonaws.com:11338',{
+    fetch(process.env.BANANO_WALLET_URL,{
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify({
