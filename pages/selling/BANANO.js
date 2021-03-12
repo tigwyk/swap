@@ -38,7 +38,8 @@ export default function SellingBanano({data}) {
           Sell BANANO
         </h3>
         <div>
-<BananoButton data={data} submitAddress={submitAddress}/>
+
+<BananoButton data={data} submitAddress={submitAddress} />
         </div>
         <Link href="/"><a>Back to home</a></Link>
         </main>

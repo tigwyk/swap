@@ -13,7 +13,6 @@ class BananoButton extends React.Component {
       showButton: true,
       showQR: false,
     };
-
     if (typeof window !== 'undefined') {
       window.React = React;
       window.ReactDOM = ReactDOM;
@@ -94,8 +93,8 @@ class BananoButton extends React.Component {
 
     const handleChange = (e) => {
       //console.log(e.target.coin_address_block.value);
-      if(nanocurrency.checkAddress(e.target.value))
-        this.setState({nano_address: e.target.value});
+      if(nanocurrency.checkAddress(e.target.coin_address_block.value))
+        this.setState({nano_address: e.target.coin_address_block.value});
     };
     return (
 

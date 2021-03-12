@@ -10,6 +10,7 @@
   "dependencies": {
     "banano-unit-converter": "^0.1.0",
     "banano-uri-generator": "^0.1.0",
+    "madge": "^4.0.2",
     "nanocurrency": "^2.5.0",
     "next": "10.0.8",
     "qrcode.react": "^1.0.1",
