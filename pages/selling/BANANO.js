@@ -44,6 +44,7 @@ export default function SellingBanano({data}) {
         <Link href="/"><a>Back to home</a></Link>
         </main>
       <footer className={styles.footer}>
+        <p>Copyright 2021</p>
       </footer>
     </>
   )
