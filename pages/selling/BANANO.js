@@ -2,16 +2,13 @@ import styles from '../../styles/Selling.module.css'
 import * as nanocurrency from 'nanocurrency'
 import BananoButton from '../../components/BananoButton'
 import Link from 'next/link'
-import useSWR from 'swr'
-
-const fetcher = (url) => fetch(url).then((res) => res.json());
+import price_list from '../../dummy.json'
+import {generate_address} from '../api/generate'
 
 export default function SellingBanano({data}) {
   
-  const {prices, error}  = useSWR('/api/prices', fetcher);
-  if (error) return <div>Failed to load</div>
-  //if (!prices) return <div>Loading...</div>
-  console.log(prices);
+  if (!price_list) return <div>Loading...</div>
+  console.log(price_list);
 
 
   const submitAddress = address => {
@@ -19,7 +16,6 @@ export default function SellingBanano({data}) {
     
     var nano_address = address;
     var knownAddress;
-      //console.log(this.state.nano_address);
       if(nanocurrency.checkAddress(nano_address)) {
         console.log("Address is in valid format");
         if(!knownAddress) {
@@ -37,8 +33,8 @@ export default function SellingBanano({data}) {
         <h3 className={styles.title}>
           Sell BANANO
         </h3>
+        <h4>@ {price_list.sell.banano.nano} NANO</h4>
         <div>
-
 <BananoButton data={data} submitAddress={submitAddress} />
         </div>
         <Link href="/"><a>Back to home</a></Link>
@@ -50,8 +46,9 @@ export default function SellingBanano({data}) {
   )
 };
 
-export async function getStaticProps(context) {
-  const data = {
+export async function getServerSideProps(context) {
+  let banano_address = await generate_address();
+  let data = {
     "id":"banano-button",
     "title":"Confirm",
     "address":"ban_16qwweg3e6nm69rkohq1cn75bzohiiemf89pky573ua9oyzwn8d63gg3tnny",
@@ -62,7 +59,12 @@ export async function getStaticProps(context) {
     "qr-level":"M",
     "qr-fg":"#000000",
     "qr-bg":"#FFFFFF"
-  };
+    };
+  try {
+    data["address"] = (banano_address.account != null ? banano_address.account : "ban_16qwweg3e6nm69rkohq1cn75bzohiiemf89pky573ua9oyzwn8d63gg3tnny");
+  } catch (err) {
+    console.error(err);
+  }
   
   if (!data) {
     return {
