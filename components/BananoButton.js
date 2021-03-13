@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import QRCode from 'qrcode.react';
-import  getSendURI  from 'banano-uri-generator';
-import  banToRaw  from 'banano-unit-converter';
+import { getSendURI } from 'banano-uri-generator';
+import { banToRaw } from 'banano-unit-converter';
 import * as nanocurrency from 'nanocurrency';
 
 class BananoButton extends React.Component {
