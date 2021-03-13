@@ -2,7 +2,7 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 
-export default function Home({prices,data}) {
+function Home({local_prices,data}) {
   return (
     <div className={styles.container}>
       <Head>
@@ -16,7 +16,7 @@ export default function Home({prices,data}) {
         </h1>
 
         <div className={styles.grid}>
-          <PairCard quote="NANO" base="BANANO" buy={prices.buy.banano.nano} sell={prices.sell.banano.nano}></PairCard>
+          <PairCard quote="NANO" base="BANANO" buy={local_prices.buy.banano.nano} sell={local_prices.sell.banano.nano}></PairCard>
         </div>
       </main>
 
@@ -28,7 +28,7 @@ export default function Home({prices,data}) {
 }
 
 
-export function PairCard(props) {
+function PairCard(props) {
   return <Link href={"/pairs/"+(props.base+props.quote)}>
   <a className={styles.card}>
   <h3>Swap {props.base}/{props.quote} </h3>
@@ -47,7 +47,7 @@ export async function getStaticProps(context) {
    }});
   const data = await res.json();
 
-  const prices = { 
+  const local_prices = { 
     "sell": {
       "banano": { 
         "nano":'0.00235000',
@@ -77,8 +77,10 @@ export async function getStaticProps(context) {
 
   return {
     props: { 
-      prices,
+      local_prices,
       data,
      }, 
   }
 }
+
+export default Home;

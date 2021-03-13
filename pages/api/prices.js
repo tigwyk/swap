@@ -22,6 +22,8 @@ export const price_list = {
   }
   };
 
-export default function handler (req, res) {
+function handler (req, res) {
   res.status(200).json(price_list)
 }
+
+export default handler;

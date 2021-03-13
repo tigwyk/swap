@@ -1,4 +1,4 @@
-import styles from '../../styles/Pairs.module.css'
+import styles from '../../styles/Selling.module.css'
 import * as nanocurrency from 'nanocurrency'
 import BananoButton from '../../components/BananoButton'
 import Link from 'next/link'
@@ -6,7 +6,7 @@ import useSWR from 'swr'
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-export default function SellingBanano({data}) {
+function SellingBanano({data}) {
   
   const {prices, error}  = useSWR('/api/prices', fetcher);
   if (error) return <div>Failed to load</div>
@@ -50,7 +50,7 @@ export default function SellingBanano({data}) {
   )
 };
 
-export async function getServerSideProps(context) {
+export async function getStaticProps(context) {
   const data = {
     "id":"banano-button",
     "title":"Confirm",
@@ -76,3 +76,5 @@ export async function getServerSideProps(context) {
      }, 
   }
 }
+
+export default SellingBanano;

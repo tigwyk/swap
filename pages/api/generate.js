@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-export default function handler (req, res) {
+function handler (req, res) {
     fetch(process.env.BANANO_WALLET_URL,{
         method: 'POST',
         mode: 'cors',
@@ -13,4 +13,5 @@ export default function handler (req, res) {
     .catch( error => console.log(error) )
     //res.status(200).json({  })
   }
-  
+
+  export default handler;

@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import styles from '../../styles/Pairs.module.css'
+import styles from '../../styles/Home.module.css'
 
-export default function BuyingBanano({prices,data}) {
+function BuyingBanano({prices,data}) {
   return (
     <>
       <main className={styles.main}>
@@ -24,3 +24,4 @@ export default function BuyingBanano({prices,data}) {
   )
 }
 
+export default BuyingBanano;
