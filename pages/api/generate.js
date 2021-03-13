@@ -36,7 +36,7 @@ export async function generate_address() {
      return response.json();
     })
     .then( data => {
-        console.log("Success: ",data);
+        //console.log("Success: ",data);
         address_list += data.account;
         return data;
     })

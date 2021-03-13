@@ -2,13 +2,14 @@ import styles from '../../styles/Selling.module.css'
 import * as nanocurrency from 'nanocurrency'
 import BananoButton from '../../components/BananoButton'
 import Link from 'next/link'
-import price_list from '../../dummy.json'
 import {generate_address} from '../api/generate'
+
+let price_list = require( '../../libs/dummy.json');
 
 export default function SellingBanano({data}) {
   
-  if (!price_list) return <div>Loading...</div>
-  console.log(price_list);
+  if (!price_list) return <div>Loading exchange rates...</div>
+  //console.log(price_list);
 
 
   const submitAddress = address => {
@@ -47,6 +48,8 @@ export default function SellingBanano({data}) {
 };
 
 export async function getServerSideProps(context) {
+  let usd_prices = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=nano,banano&vs_currencies=usd");
+  console.log(await usd_prices.json());
   let banano_address = await generate_address();
   let data = {
     "id":"banano-button",

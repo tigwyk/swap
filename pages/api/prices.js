@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import price_list from '../../dummy.json'
+let price_list = require( '../../dummy.json');
 /*
 export const price_list = { 
   "sell": {
