@@ -1,5 +1,8 @@
 const mysql = require('serverless-mysql')
 
+console.log(process.env.MYSQL_HOST);
+console.log(process.env.MYSQL_DATABASE);
+
 const db = mysql({
   config: {
     host: process.env.MYSQL_HOST,
@@ -13,7 +16,7 @@ exports.query = async (query) => {
   try {
     const results = await db.query(query);
     await db.end();
-    console.log(results);
+    console.log(await results);
     return results;
   } catch (error) {
     return { error }
