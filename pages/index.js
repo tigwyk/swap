@@ -2,7 +2,7 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 
-function Home({local_prices,data}) {
+export default function Home({local_prices,data}) {
   return (
     <div className={styles.container}>
       <Head>
@@ -28,7 +28,7 @@ function Home({local_prices,data}) {
 }
 
 
-function PairCard(props) {
+export function PairCard(props) {
   return <Link href={"/pairs/"+(props.base+props.quote)}>
   <a className={styles.card}>
   <h3>Swap {props.base}/{props.quote} </h3>
@@ -82,5 +82,3 @@ export async function getStaticProps(context) {
      }, 
   }
 }
-
-export default Home;

@@ -6,11 +6,11 @@ import useSWR from 'swr'
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-function SellingBanano({data}) {
+export default function SellingBanano({data}) {
   
   const {prices, error}  = useSWR('/api/prices', fetcher);
   if (error) return <div>Failed to load</div>
-  if (!prices) return <div>Loading...</div>
+  //if (!prices) return <div>Loading...</div>
   console.log(prices);
 
 
@@ -27,7 +27,7 @@ function SellingBanano({data}) {
         } else {
           console.log("We recognize this address! Let's lookup the previous counter-address");
         }
-        //event.target.banano_button.setState({ showButton: false, showQR: true });
+        
       }
   }
 
@@ -76,5 +76,3 @@ export async function getStaticProps(context) {
      }, 
   }
 }
-
-export default SellingBanano;

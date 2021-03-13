@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import styles from '../../styles/Pairs.module.css'
 
-function BuyCard(props) {
+export function BuyCard(props) {
   return <Link href={"/buying/"+props.base}>
   <a className={styles.card}>
   <h3>Buy {props.base} </h3>
@@ -10,7 +10,7 @@ function BuyCard(props) {
   </Link> 
 };
 
-function SellCard(props) {
+export function SellCard(props) {
   return <Link href={"/selling/"+props.base}>
   <a className={styles.card}>
   <h3>Sell {props.base}</h3>
@@ -19,7 +19,7 @@ function SellCard(props) {
   </Link> 
 };
 
-function BananoNano({prices}) {
+export default function BananoNano({prices}) {
   return (
     <>
       <main className={styles.main}>
@@ -66,5 +66,3 @@ export async function getStaticProps(context) {
      }, 
   }
 }
-
-export default BananoNano;
