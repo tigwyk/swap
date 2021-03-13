@@ -1,9 +1,8 @@
-import Link from 'next/link'
 import styles from '../../styles/Pairs.module.css'
+import * as nanocurrency from 'nanocurrency'
 import BananoButton from '../../components/BananoButton'
-
-import * as nanocurrency from 'nanocurrency';
-import useSWR from 'swr';
+import Link from 'next/link'
+import useSWR from 'swr'
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
