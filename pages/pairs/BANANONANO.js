@@ -40,7 +40,7 @@ export default function BananoNano({prices}) {
 }
 
 export async function getStaticProps(context) {
-  prices = price_list;
+  let prices = price_list;
   if (!prices) {
     return {
       notFound: true,
