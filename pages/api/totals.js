@@ -1,9 +1,10 @@
 const db = require('../../libs/db');
 
 module.exports = async (req, res) => {
-  const address_pairs = await db.query(`
-    SELECT *
+  const total = await db.query(`
+    SELECT COUNT(*) AS TOTAL
     FROM address_pairs
   `);
-  res.end(JSON.stringify({ address_pairs }));
+  
+  res.end(JSON.stringify(total));
 }
