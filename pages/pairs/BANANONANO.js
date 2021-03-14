@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import styles from '../../styles/Pairs.module.css'
+let price_list = require( '../../libs/dummy.json');
 
 export function BuyCard(props) {
   return <Link href={"/buying/"+props.base}>
@@ -39,21 +40,7 @@ export default function BananoNano({prices}) {
 }
 
 export async function getStaticProps(context) {
-  const prices = {
-    "sell": {
-      "banano": { 
-        "nano":'0.00235000',
-        "moon" : "99999999999",
-      }
-    },
-    "buy" :{ 
-      "banano":{
-        "nano": '0.00296340',
-        "moon" : "999999999999"
-      }
-    }
-  }
-
+  prices = price_list;
   if (!prices) {
     return {
       notFound: true,
