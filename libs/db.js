@@ -19,6 +19,7 @@ exports.query = async (query) => {
     console.log(await results);
     return results;
   } catch (error) {
+      console.error(error);
     return { error }
   }
 }
