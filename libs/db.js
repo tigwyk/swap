@@ -16,7 +16,7 @@ const db = mysql({
   },
 });
 
-exports.query = async (query) => {
+export async function query(query) {
   try {
     const results = await db.query(query);
     await db.end();
