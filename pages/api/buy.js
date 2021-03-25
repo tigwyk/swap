@@ -2,7 +2,7 @@ const db = require('../../libs/db');
 
 async function handler(req, res) {
   if(req.method === 'POST') {
-    console.log(req.body);
+    //console.log(req.body);
     
     let buy_order_result = await createBuyOrder(req.body.base_address,req.body.quote_address,req.body.base_currency,req.body.quote_currency,req.body.exchange_rate);
     try {
@@ -15,8 +15,8 @@ async function handler(req, res) {
   }
 }
 
-export async function createSellOrder(baseAddress, quoteAddress, baseCurrency, quoteCurrency, exchangeRate) {
-  const submitSellOrder = await db.query(`
+export async function createBuyOrder(baseAddress, quoteAddress, baseCurrency, quoteCurrency, exchangeRate) {
+  const submitBuyOrder = await db.query(`
   INSERT INTO address_pairs (base_address, quote_address, exchange_rate, base_currency, quote_currency)
   VALUES ('${baseAddress}','${quoteAddress}','${exchangeRate}','${baseCurrency}','${quoteCurrency}')
   `);
@@ -29,7 +29,7 @@ export async function createSellOrder(baseAddress, quoteAddress, baseCurrency, q
 `);
  return await base_address;
  */
-  return await submitSellOrder;
+  return await submitBuyOrder;
 }
 
 export default handler;

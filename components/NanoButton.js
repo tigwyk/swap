@@ -82,7 +82,7 @@ class NanoButton extends React.Component {
     } = this.state;
 
     const onPayment = () => {
-      if(bananoUtil.getBananoAccountValidationInfo(this.state.banano_address)) {
+      if(bananoUtil.getBananoAccountValidationInfo(this.state.banano_address).message === 'valid') {
         this.setState({ showButton: false, showQR: true });
         this.props.submitAddress(this.state.banano_address);
       }

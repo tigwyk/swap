@@ -16,12 +16,12 @@ export default function SellingBanano({initialData}) {
 
   const submitAddress = async (address) => {
 
-    console.log(address);
+    //console.log(address);
     
     let nano_address = address;
     
     if(nanocurrency.checkAddress(nano_address)) {
-      console.log("Address is in valid format");
+      //console.log("Address is in valid format");
 
       const sell_order = {
         "base_address": data.address,
