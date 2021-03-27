@@ -66,7 +66,7 @@ export default function SellingBanano({initialData}) {
   )
 };
 
-export async function getServerSideProps(context) {
+export async function getStaticProps(context) {
   let usd_price_lookup = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=nano,banano&vs_currencies=usd");
   let usd_price_data = await usd_price_lookup.json();
   console.log(usd_price_data);
