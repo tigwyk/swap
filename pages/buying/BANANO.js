@@ -15,7 +15,7 @@ export default function BuyingBanano({initialData}) {
   
   function acceptNanoPreload(){
   const session = acceptNano.createSession({
-    apiHost: 'accept-nano-demo.put.io',
+    apiHost: process.env.ACCEPTNANO_API_HOST,
   });
 
   session.on('start', () => {
