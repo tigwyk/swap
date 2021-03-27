@@ -3,7 +3,7 @@ import styles from '../../styles/Selling.module.css';
 import * as nanocurrency from 'nanocurrency';
 import BananoButton from '../../components/BananoButton';
 import Link from 'next/link';
-import {generate_banano_address} from '../api/generate';
+//import {generate_banano_address} from '../api/generate';
 
 let price_list = require( '../../libs/dummy.json');
 
