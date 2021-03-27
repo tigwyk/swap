@@ -78,7 +78,7 @@ export async function getServerSideProps(context) {
   console.log("BANANO/NANO: ",how_many_banano_per_nano.toFixed(6));
   let exchange_rate = ((how_many_nano_per_banano.toFixed(6))*0.95).toFixed(6);
   console.log("Exchange rate: ",exchange_rate);
-  let banano_address = await generate_banano_address();
+  //let banano_address = await generate_banano_address();
   let initialData = {
     "id":"banano-button",
     "title":"Confirm",

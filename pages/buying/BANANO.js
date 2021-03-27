@@ -122,7 +122,7 @@ export async function getStaticProps(context) {
   let exchange_rate = ((1/how_many_nano_per_banano)*.9).toFixed(6);
   //let buy_rate = ((how_many_banano_per_nano.toFixed(6))*0.95).toFixed(6);
   //console.log("Exchange rate: ",exchange_rate);
-  let nano_address = await generate_nano_address();
+  //let nano_address = await generate_nano_address();
 
   let initialData = {
     "id":"banano-button",
