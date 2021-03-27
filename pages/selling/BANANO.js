@@ -93,12 +93,13 @@ export async function getServerSideProps(context) {
     "exchange_rate":exchange_rate,
     "banano_per_nano":how_many_banano_per_nano.toFixed(2)
     };
+    /*
   try {
     initialData["address"] = (banano_address.account != null ? banano_address.account : "ban_16qwweg3e6nm69rkohq1cn75bzohiiemf89pky573ua9oyzwn8d63gg3tnny");
   } catch (err) {
     console.error(err);
   }
-  
+  */
   if (!initialData) {
     return {
       notFound: true,
