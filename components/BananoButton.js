@@ -113,7 +113,7 @@ class BananoButton extends React.Component {
                 />}
             {showQR && data.info && <div style={ styles }>
               <div><small>Address: {data.address}</small></div>
-              <div><small>Amount: Between 0.2 and 1 BANANO</small></div>
+              <div><small>Amount: Between 0.2 and 10 BANANO</small></div>
               <div>Instructions: Send amount to BANANO address and receive exchanged currency to supplied address.</div>
             </div>}
       </div>
