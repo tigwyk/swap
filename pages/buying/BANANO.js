@@ -139,12 +139,13 @@ export async function getStaticProps(context) {
     //"buy_rate": buy_rate,
     "nano_per_banano":(1/exchange_rate).toFixed(6)
     };
+    /*
   try {
     initialData["address"] = (nano_address.account != null ? nano_address.account : "nano_1x9rjf8xnjffznaxd18n8rc1m396ao8ky1uqpmapdzat5npy11if4kuh4ubd");
   } catch (err) {
     console.error(err);
   }
-  
+  */
   if (!initialData) {
     return {
       notFound: true,
