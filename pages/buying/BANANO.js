@@ -100,20 +100,26 @@ session.createPayment({
   state: data,
 })
   }
+  const handleChange = (e) => {
+    //console.log(e.target.coin_address_block.value);
+    if(bananoUtil.getBananoAccountValidationInfo(e.target.value)) {
+      console.log("Banano address: ",e.target.value);
+    };
+  }
   return (
     <>
       <main className={styles.main}>
         <h3 className={styles.title}>
           Buy BANANO
         </h3>
-        <h4>@ {(1/data.exchange_rate).toFixed(6)} NANO</h4>
+        <h4>@ {(1/data.exchange_rate).toFixed(6)} NANO/per</h4>
         <p>1 BANANO = ~{data.nano_per_banano} NANO</p>
         <form onSubmit={submitAddress}>
-        <div>
-        <NanoButton data={data} submitAddress={submitAddress} />
+        <div className="input-group">
+        <input className="form-control" type="text" name="coin_address_block" placeholder="ban_" autoComplete="on" pattern="^[ban]_[13][0-13-9a-km-uw-z]{59}$" size="75" required onChange={handleChange} />
+        <button className="btn btn-primary" onClick={testPayment}>Confirm</button>
         </div>
         </form>
-        <button onClick={testPayment}/>
         <Link href="/"><a>Back to home</a></Link>
         </main>
       <footer className={styles.footer}>
