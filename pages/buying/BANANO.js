@@ -125,6 +125,7 @@ export default function BuyingBanano({initialData}) {
   }
 
   const handleAmountChange = (e) => {
+    console.log(e.target.form.nano_to_pay.placeholder);
     let localData = data;
     let floatedValue = 0.00;
     if(! isNaN(e.target.value)) {
@@ -134,6 +135,7 @@ export default function BuyingBanano({initialData}) {
     } else {
       localData.amount = e.target.value;
     }
+    e.target.form.nano_to_pay.placeholder = localData.amount*data.nano_per_banano;
     return setData(localData);
   }
 
@@ -146,11 +148,26 @@ export default function BuyingBanano({initialData}) {
         <h4>@ {(1/data.exchange_rate).toFixed(6)} NANO/per</h4>
         <p>1 BANANO = ~{data.nano_per_banano} NANO</p>
         <form onSubmit={submitNanoPayment}>
-        <input className="form-control" type="text" name="coin_address_block" placeholder="ban_1burnbabyburndiscoinferno111111111111111111111111111aj49sw3w" autoComplete="on" pattern="^ban_[13][0-13-9a-km-uw-z]{59}$" size="75" required onChange={handleAddressChange} />
         <div className="input-group">
-        <input className="form-control" name="coin_amount" placeholder={data.banano_per_nano.toFixed(3)} onChange={handleAmountChange} />
-        <button className="btn btn-primary" >Confirm</button>
+            <span className="input-group-text">Receive BANANO at:</span>
+        <input className="form-control" type="text" name="coin_address_block" placeholder="ban_1burnbabyburndiscoinferno111111111111111111111111111aj49sw3w" autoComplete="on" pattern="^ban_[13][0-13-9a-km-uw-z]{59}$" size="75" required onChange={handleAddressChange} />
         </div>
+        <div className="input-group">
+        <span className="input-group-text">BANANO to receive:</span>
+        <input className="form-control" name="coin_amount" placeholder={data.banano_per_nano.toFixed(6)} onChange={handleAmountChange} />
+        
+        </div>
+        <div className="input-group">
+        <span className="input-group-text">NANO to pay:</span>
+          <input className="form-control" name="nano_to_pay" type="text" placeholder={(data.amount*data.nano_per_banano).toFixed(6)} readOnly />
+          
+        </div>
+        <center>
+        <div className="btn-group" role="group" aria-label="Confirm or Cancel">
+        <button className="btn btn-primary" type="submit">Confirm</button>
+        <button className="btn btn-primary" type="reset">Reset</button>
+        </div>
+        </center>
         </form>
         <Link href="/"><a>Back to home</a></Link>
         </main>
