@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import styles from '../../styles/Selling.module.css';
 import * as nanocurrency from 'nanocurrency';
-import NanoButton from '../../components/NanoButton';
 import Link from 'next/link';
 import Router from 'next/router';
-//import {generate_nano_address} from '../api/generate';
-const bananoUtil = require('@bananocoin/bananojs');
+
+const bananojs = require('@bananocoin/bananojs');
+import { rawToBan } from 'banano-unit-converter';
 
 let price_list = require( '../../libs/dummy.json');
 const acceptNano = require('@accept-nano/client');
@@ -65,43 +65,14 @@ export default function BuyingBanano({initialData}) {
   if (!price_list) return <div>Loading exchange rates...</div>
   //console.log(price_list);
 
-  const submitAddress = async (address) => {
-
-    //console.log(address);
-    
-    let banano_address = address;
-    if(bananoUtil.getBananoAccountValidationInfo(banano_address).message === 'valid') {
-      //console.log("Address is in valid format");
-
-      const buy_order = {
-        "base_address": data.address,
-        "quote_address": banano_address,
-        "base_currency":"banano",
-        "quote_currency":"nano",
-        "exchange_rate":data.ecxhange_rate
-      };
-
-      const submit_buy_order = await fetch("http://localhost:3000/api/buy",{
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(buy_order)
-      });
-      const buy_order_results = await submit_buy_order.json();
-      //console.log(buy_order_results);
-    }
-  };
-
   const submitNanoPayment = async (event) => {
     event.preventDefault();
     let dest_address = event.target.coin_address_block.value;
     let requestedAmount = parseFloat(event.target.coin_amount.value);
-    console.log("Dest address: ",dest_address);
-    console.log("Requested amount of BANANO: ",requestedAmount);
+    //console.log("Dest address: ",dest_address);
+    //console.log("Requested amount of BANANO: ",requestedAmount);
     let amountPay = requestedAmount*data.nano_per_banano;
-    console.log("NANO to pay: ",amountPay)
+    //console.log("NANO to pay: ",amountPay)
     return session.createPayment({
       amount: amountPay,
       currency: 'NANO',
@@ -109,14 +80,10 @@ export default function BuyingBanano({initialData}) {
     });
   }
 
-
-  function testPayment() {  
-  
-  }
   const handleAddressChange = (e) => {
     let localData = data;
     //console.log(e.target.coin_address_block.value);
-    if(bananoUtil.getBananoAccountValidationInfo(e.target.value).valid) {
+    if(bananojs.getBananoAccountValidationInfo(e.target.value).valid) {
       localData.destination_address = e.target.value;
       //console.log("Banano address: ",localData.destination_address);
       
@@ -125,17 +92,22 @@ export default function BuyingBanano({initialData}) {
   }
 
   const handleAmountChange = (e) => {
-    console.log(e.target.form.nano_to_pay.placeholder);
+    //console.log(e.target.form.nano_to_pay.placeholder);
     let localData = data;
     let floatedValue = 0.00;
-    if(! isNaN(e.target.value)) {
+    const ceiling = data.max_banano_transaction_size;
+    if(isNaN(e.target.value)) {
       floatedValue = parseFloat(e.target.value);
       localData.amount = floatedValue;
       
     } else {
       localData.amount = e.target.value;
     }
-    e.target.form.nano_to_pay.placeholder = localData.amount*data.nano_per_banano;
+    if(localData.amount > ceiling) {
+      e.target.value = ceiling;
+      localData.amount = ceiling;
+    }
+    e.target.form.nano_to_pay.placeholder = (localData.amount*data.nano_per_banano).toFixed(6);
     return setData(localData);
   }
 
@@ -147,6 +119,7 @@ export default function BuyingBanano({initialData}) {
         </h3>
         <h4>@ {(1/data.exchange_rate).toFixed(6)} NANO/per</h4>
         <p>1 BANANO = ~{data.nano_per_banano} NANO</p>
+        <small>Max. {data.max_banano_transaction_size} BANANO</small>
         <form onSubmit={submitNanoPayment}>
         <div className="input-group">
             <span className="input-group-text">Receive BANANO at:</span>
@@ -180,6 +153,28 @@ export default function BuyingBanano({initialData}) {
 
 export async function getStaticProps(context) {
   let usd_price_lookup = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=nano,banano&vs_currencies=usd");
+  //let banano_balance = await fetch("https://api-beta.banano.cc?");
+  //let nano_balance = await fetch("https://proxy.powernode.cc/proxy?action=");
+
+  //console.log(process.env.BANANO_HOTWALLET_ACCOUNT_ONE);
+  const balance_query = {
+    "action": "account_balance",
+    "account": process.env.BANANO_HOTWALLET_ACCOUNT_ONE
+  };
+
+  const banano_balance_lookup = await fetch(process.env.BANANO_WALLET_URL,{
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(balance_query)
+  });
+  let banano_balance_response = await banano_balance_lookup.json();
+  console.log(banano_balance_response);
+  let banano_balance = rawToBan(banano_balance_response.balance);
+  console.log(banano_balance);
+  const MAX_BANANO_TRANS_SIZE = banano_balance*0.85;
   let usd_price_data = await usd_price_lookup.json();
   //console.log(usd_price_data);
   //console.log("NANO: ",usd_price_data.nano.usd);
@@ -196,6 +191,7 @@ export async function getStaticProps(context) {
   let initialData = {
     "id":"banano-button",
     "title":"Confirm",
+    "max_banano_transaction_size": MAX_BANANO_TRANS_SIZE,
     "receiving_address":"nano_1x9rjf8xnjffznaxd18n8rc1m396ao8ky1uqpmapdzat5npy11if4kuh4ubd",
     "amount":"0.1",
     "destination_address": "",
