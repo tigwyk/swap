@@ -3,6 +3,7 @@ import styles from '../../styles/Selling.module.css';
 import * as nanocurrency from 'nanocurrency';
 import NanoButton from '../../components/NanoButton';
 import Link from 'next/link';
+import Router from 'next/router';
 //import {generate_nano_address} from '../api/generate';
 const bananoUtil = require('@bananocoin/bananojs');
 
@@ -11,14 +12,20 @@ const acceptNano = require('@accept-nano/client');
 
 //console.log(process.env.ACCEPTNANO_API_HOST);
 
+function paymentSucceeded(amount, state) {
+  console.log("Amount: ",amount);
+  console.log("Payment state: ",state);
+}
+
 export default function BuyingBanano({initialData}) {
   const [data, setData] = useState(initialData);
   const [session, setSession] = useState(null);
   
   function acceptNanoPreload(){
-    console.log(data.acceptnano_api_host);
+    //console.log(data.acceptnano_api_host);
     const session = acceptNano.createSession({
       apiHost: data.acceptnano_api_host,
+      debug: true,
     });
 
   session.on('start', () => {
@@ -29,16 +36,20 @@ export default function BuyingBanano({initialData}) {
   session.on('end', (error, payment) => {
     if (error) {
       //return BuyingBanano.paymentFailed({ reason: error.reason })
-      setSession(null);
+      if(error.reason === "USER_TERMINATED"){
+        setSession(null);
+        console.log("User clicked the X, refreshing...");
+        return Router.reload(window.location.pathname);
+      }
       return console.log('ACCEPTNANO Error: ',error.reason);
     }
-    return console.log('ACCEPTNANO Success: ',payment);
-    /*
-    return BuyingBanano.paymentSucceeded({
+    console.log('ACCEPTNANO Success: ',payment);
+    
+    return paymentSucceeded({
       amount: payment.amount,
       state: payment.state,
-    })
-    */
+    });
+    
   });
   setSession(session);  
 }
@@ -84,7 +95,7 @@ export default function BuyingBanano({initialData}) {
   };
   function testPayment() {  
 session.createPayment({
-  amount: '1',
+  amount: '0.0001',
   currency: 'NANO',
   state: data,
 })
