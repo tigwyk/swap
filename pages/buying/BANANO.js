@@ -93,19 +93,50 @@ export default function BuyingBanano({initialData}) {
       //console.log(buy_order_results);
     }
   };
+
+  const submitNanoPayment = async (event) => {
+    event.preventDefault();
+    let dest_address = event.target.coin_address_block.value;
+    let requestedAmount = parseFloat(event.target.coin_amount.value);
+    console.log("Dest address: ",dest_address);
+    console.log("Requested amount of BANANO: ",requestedAmount);
+    let amountPay = requestedAmount*data.nano_per_banano;
+    console.log("NANO to pay: ",amountPay)
+    return session.createPayment({
+      amount: amountPay,
+      currency: 'NANO',
+      state: data,
+    });
+  }
+
+
   function testPayment() {  
-session.createPayment({
-  amount: '0.0001',
-  currency: 'NANO',
-  state: data,
-})
+  
   }
-  const handleChange = (e) => {
+  const handleAddressChange = (e) => {
+    let localData = data;
     //console.log(e.target.coin_address_block.value);
-    if(bananoUtil.getBananoAccountValidationInfo(e.target.value)) {
-      console.log("Banano address: ",e.target.value);
-    };
+    if(bananoUtil.getBananoAccountValidationInfo(e.target.value).valid) {
+      localData.destination_address = e.target.value;
+      //console.log("Banano address: ",localData.destination_address);
+      
+      return setData(localData);
+    }
   }
+
+  const handleAmountChange = (e) => {
+    let localData = data;
+    let floatedValue = 0.00;
+    if(! isNaN(e.target.value)) {
+      floatedValue = parseFloat(e.target.value);
+      localData.amount = floatedValue;
+      
+    } else {
+      localData.amount = e.target.value;
+    }
+    return setData(localData);
+  }
+
   return (
     <>
       <main className={styles.main}>
@@ -114,10 +145,11 @@ session.createPayment({
         </h3>
         <h4>@ {(1/data.exchange_rate).toFixed(6)} NANO/per</h4>
         <p>1 BANANO = ~{data.nano_per_banano} NANO</p>
-        <form onSubmit={submitAddress}>
+        <form onSubmit={submitNanoPayment}>
+        <input className="form-control" type="text" name="coin_address_block" placeholder="ban_1burnbabyburndiscoinferno111111111111111111111111111aj49sw3w" autoComplete="on" pattern="^ban_[13][0-13-9a-km-uw-z]{59}$" size="75" required onChange={handleAddressChange} />
         <div className="input-group">
-        <input className="form-control" type="text" name="coin_address_block" placeholder="ban_" autoComplete="on" pattern="^[ban]_[13][0-13-9a-km-uw-z]{59}$" size="75" required onChange={handleChange} />
-        <button className="btn btn-primary" onClick={testPayment}>Confirm</button>
+        <input className="form-control" name="coin_amount" placeholder={data.banano_per_nano.toFixed(3)} onChange={handleAmountChange} />
+        <button className="btn btn-primary" >Confirm</button>
         </div>
         </form>
         <Link href="/"><a>Back to home</a></Link>
@@ -147,8 +179,9 @@ export async function getStaticProps(context) {
   let initialData = {
     "id":"banano-button",
     "title":"Confirm",
-    "address":"nano_1x9rjf8xnjffznaxd18n8rc1m396ao8ky1uqpmapdzat5npy11if4kuh4ubd",
-    "amount":"",
+    "receiving_address":"nano_1x9rjf8xnjffznaxd18n8rc1m396ao8ky1uqpmapdzat5npy11if4kuh4ubd",
+    "amount":"0.1",
+    "destination_address": "",
     "info":"yes",
     "label":"swap",
     "qr-size":"128",
@@ -158,7 +191,8 @@ export async function getStaticProps(context) {
     "exchange_rate":exchange_rate,
     "acceptnano_api_host": process.env.ACCEPTNANO_API_HOST,
     //"buy_rate": buy_rate,
-    "nano_per_banano":(1/exchange_rate).toFixed(6)
+    "nano_per_banano":(1/exchange_rate).toFixed(6),
+    "banano_per_nano":how_many_banano_per_nano,
     };
     /*
   try {

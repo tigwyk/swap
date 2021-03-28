@@ -99,7 +99,7 @@ class BananoButton extends React.Component {
     return (
 
       <div className="input-group">
-        {showButton && <input className="form-control" type="text" name="coin_address_block" placeholder="nano_" autoComplete="on" pattern="^[nano]_[13][0-13-9a-km-uw-z]{59}$" size="75" required onChange={handleChange}/>}
+        {showButton && <input className="form-control" type="text" name="coin_address_block" placeholder="nano_" autoComplete="on" pattern="^nano_[13][0-13-9a-km-uw-z]{59}$" size="75" required onChange={handleChange}/>}
         {showButton && <button onClick={onPayment} type="submit" className="btn btn-primary" name="banano_button">
           {data.title ? data.title : 'Pay with BAN'}
           </button>}
