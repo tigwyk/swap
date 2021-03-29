@@ -159,7 +159,7 @@ export async function getStaticProps(context) {
   //console.log(process.env.BANANO_HOTWALLET_ACCOUNT_ONE);
   const balance_query = {
     "action": "account_balance",
-    "account": process.env.BANANO_HOTWALLET_ACCOUNT_ONE
+    "account": process.env.NANO_HOTWALLET_ACCOUNT_ONE
   };
 
   const banano_balance_lookup = await fetch(process.env.BANANO_WALLET_URL,{

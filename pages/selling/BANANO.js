@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '../../styles/Selling.module.css';
 import * as nanocurrency from 'nanocurrency';
 
 import Link from 'next/link';
 import { rawToBan } from 'banano-unit-converter';
+import { megaToRaw, rawToMega } from 'nano-unit-converter';
 
 let price_list = require( '../../libs/dummy.json');
-
+const acceptNano = require('@accept-nano/client');
 
 function paymentSucceeded(amount, state) {
   console.log("Amount: ",amount);
@@ -59,14 +60,14 @@ useEffect(() => {
   if (!price_list) return <div>Loading exchange rates...</div>
   //console.log(price_list);
 
-  const submitNanoPayment = async (event) => {
+  const submitBananoPayment = async (event) => {
     event.preventDefault();
     let dest_address = event.target.coin_address_block.value;
     let requestedAmount = parseFloat(event.target.coin_amount.value);
-    //console.log("Dest address: ",dest_address);
-    //console.log("Requested amount of BANANO: ",requestedAmount);
+    console.log("Dest address: ",dest_address);
+    console.log("Requested amount of BANANO: ",requestedAmount);
     let amountPay = requestedAmount*data.nano_per_banano;
-    //console.log("NANO to pay: ",amountPay)
+    console.log("NANO to pay: ",amountPay)
     return session.createPayment({
       amount: amountPay,
       currency: 'NANO',
@@ -77,7 +78,7 @@ useEffect(() => {
   const handleAddressChange = (e) => {
     let localData = data;
     //console.log(e.target.coin_address_block.value);
-    if(bananojs.getBananoAccountValidationInfo(e.target.value).valid) {
+    if(nanocurrency.checkAddress(e.target.value)) {
       localData.destination_address = e.target.value;
       //console.log("Banano address: ",localData.destination_address);
       
@@ -89,7 +90,8 @@ useEffect(() => {
     //console.log(e.target.form.nano_to_pay.placeholder);
     let localData = data;
     let floatedValue = 0.00;
-    const ceiling = data.max_banano_transaction_size;
+    const ceiling = data.max_nano_transaction_size/data.banano_per_nano;
+    //console.log("Ceiling: ",ceiling);
     if(isNaN(e.target.value)) {
       floatedValue = parseFloat(e.target.value);
       localData.amount = floatedValue;
@@ -101,7 +103,7 @@ useEffect(() => {
       e.target.value = ceiling;
       localData.amount = ceiling;
     }
-    e.target.form.nano_to_pay.placeholder = (localData.amount*data.nano_per_banano).toFixed(6);
+    e.target.form.nano_to_receive.placeholder = (localData.amount*data.banano_per_nano).toFixed(6);
     return setData(localData);
   } 
   return (
@@ -111,20 +113,20 @@ useEffect(() => {
           Sell BANANO
         </h3>
         <h4>@ {data.exchange_rate} NANO</h4>
-        <p>1 NANO = ~{data.banano_per_nano} BANANO</p>
-        <form onSubmit={submitNanoPayment}>
+        <p>1 NANO = ~{data.nano_per_banano.toFixed(3)} BANANO</p>
+        <form onSubmit={submitBananoPayment}>
         <div className="input-group">
             <span className="input-group-text">Receive NANO at:</span>
-        <input className="form-control" type="text" name="coin_address_block" placeholder="ban_1burnbabyburndiscoinferno111111111111111111111111111aj49sw3w" autoComplete="on" pattern="^ban_[13][0-13-9a-km-uw-z]{59}$" size="75" required onChange={handleAddressChange} />
+        <input className="form-control" type="text" name="coin_address_block" placeholder="nano_1111111111111111111111111111111111111111111111111111hifc8npp" autoComplete="on" pattern="^ban_[13][0-13-9a-km-uw-z]{59}$" size="75" required onChange={handleAddressChange} />
         </div>
         <div className="input-group">
         <span className="input-group-text">BANANO to sell:</span>
-        <input className="form-control" name="coin_amount" placeholder={data.nano_per_banano.toFixed(6)} onChange={handleAmountChange} />
+        <input className="form-control" name="coin_amount" placeholder={(data.banano_per_nano).toFixed(6)} onChange={handleAmountChange} />
         
         </div>
         <div className="input-group">
         <span className="input-group-text">NANO to receive:</span>
-          <input className="form-control" name="nano_to_pay" type="text" placeholder={(data.amount*data.nano_per_banano).toFixed(6)} readOnly />
+          <input className="form-control" name="nano_to_receive" type="text" placeholder={(data.amount*data.exchange_rate)} readOnly />
           
         </div>
         <center>
@@ -163,9 +165,9 @@ export async function getStaticProps(context) {
     body: JSON.stringify(balance_query)
   });
   let nano_balance_response = await nano_balance_lookup.json();
-  console.log(nano_balance_response);
-  let nano_balance = rawToBan(nano_balance_response.balance);
-  console.log(nano_balance);
+  //console.log(nano_balance_response);
+  let nano_balance = rawToMega(nano_balance_response.balance);
+  console.log("NANO Hotwallet Balance: ",nano_balance);
   const MAX_NANO_TRANS_SIZE = nano_balance*0.85;
   let usd_price_data = await usd_price_lookup.json();
   //console.log(usd_price_data);
@@ -175,7 +177,7 @@ export async function getStaticProps(context) {
   let how_many_banano_per_nano = usd_price_data.nano.usd / usd_price_data.banano.usd;
   //console.log("NANO/BANANO: ",how_many_nano_per_banano.toFixed(6));
   //console.log("BANANO/NANO: ",how_many_banano_per_nano.toFixed(6));
-  let exchange_rate = ((1/how_many_nano_per_banano)*.9).toFixed(6);
+  let exchange_rate = ((how_many_nano_per_banano)*.9).toFixed(6);
   //let buy_rate = ((how_many_banano_per_nano.toFixed(6))*0.95).toFixed(6);
   //console.log("Exchange rate: ",exchange_rate);
   //let nano_address = await generate_nano_address();
@@ -196,8 +198,8 @@ export async function getStaticProps(context) {
     "exchange_rate":exchange_rate,
     "acceptnano_api_host": process.env.ACCEPTNANO_API_HOST,
     //"buy_rate": buy_rate,
-    "nano_per_banano":(1/exchange_rate).toFixed(6),
-    "banano_per_nano":how_many_banano_per_nano,
+    "nano_per_banano":(1/exchange_rate),
+    "banano_per_nano":(exchange_rate/1),
     };
     /*
   try {

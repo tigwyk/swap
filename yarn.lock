@@ -1610,6 +1610,13 @@ mysql@^2.18.1:
     safe-buffer "5.1.2"
     sqlstring "2.3.1"
 
+nano-unit-converter@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/nano-unit-converter/-/nano-unit-converter-2.0.0.tgz#aa9f5d46db9bbbaa80efabd590953f0b6cb2f0f4"
+  integrity sha512-ML80yM0+KhSk6c8HKkmHsggKsPa462QYqihbCDYr3dmSnTaSnBEPCPrsyDenEOiO+99jMWWKvBqem9xXscLqwg==
+  dependencies:
+    big.js "^5.2.2"
+
 nanocurrency@^2.5.0:
   version "2.5.0"
   resolved "https://registry.npmjs.org/nanocurrency/-/nanocurrency-2.5.0.tgz"
