@@ -3,6 +3,8 @@ import styles from '../../styles/Selling.module.css';
 import * as nanocurrency from 'nanocurrency';
 import Link from 'next/link';
 import Router from 'next/router';
+import {sendBananoPayment} from '../api/sendBanano';
+import axios from 'axios';
 
 const bananojs = require('@bananocoin/bananojs');
 import { rawToBan } from 'banano-unit-converter';
@@ -12,9 +14,13 @@ const acceptNano = require('@accept-nano/client');
 
 //console.log(process.env.ACCEPTNANO_API_HOST);
 
-function paymentSucceeded(amount, state) {
-  console.log("Amount: ",amount);
-  console.log("Payment state: ",state);
+async function paymentSucceeded({amount, state}) {
+  //const payment = await sendBananoPayment(data.amount,destination);
+  const payment = await axios.post('/api/sendBanano', {
+    amount: state.amount,
+    destination: state.destination_address,
+    state: JSON.stringify(state)
+  });
 }
 
 export default function BuyingBanano({initialData}) {
@@ -25,12 +31,11 @@ export default function BuyingBanano({initialData}) {
     //console.log(data.acceptnano_api_host);
     const session = acceptNano.createSession({
       apiHost: data.acceptnano_api_host,
-      debug: true,
     });
 
   session.on('start', () => {
     //BuyingBanano.paymentStarted();
-    console.log('ACCEPTNANO CLIENT EVENT: start')
+    //console.log('ACCEPTNANO CLIENT EVENT: start')
   });
   
   session.on('end', (error, payment) => {
@@ -38,21 +43,25 @@ export default function BuyingBanano({initialData}) {
       //return BuyingBanano.paymentFailed({ reason: error.reason })
       if(error.reason === "USER_TERMINATED"){
         setSession(null);
-        console.log("User clicked the X, refreshing...");
+        //console.log("User clicked the X, refreshing...");
         return Router.reload(window.location.pathname);
       }
       return console.log('ACCEPTNANO Error: ',error.reason);
     }
-    console.log('ACCEPTNANO Success: ',payment);
+    //console.log('ACCEPTNANO Success: ',payment);
+    //console.log("Payment state: ",payment.state);
     
     return paymentSucceeded({
       amount: payment.amount,
       state: payment.state,
+      //data: data
     });
     
   });
+
   setSession(session);  
 }
+
 //acceptNanoPreload();
 
 
@@ -67,7 +76,7 @@ export default function BuyingBanano({initialData}) {
 
   const submitNanoPayment = async (event) => {
     event.preventDefault();
-    let dest_address = event.target.coin_address_block.value;
+    //let dest_address = event.target.coin_address_block.value;
     let requestedAmount = parseFloat(event.target.coin_amount.value);
     //console.log("Dest address: ",dest_address);
     //console.log("Requested amount of BANANO: ",requestedAmount);
@@ -75,7 +84,7 @@ export default function BuyingBanano({initialData}) {
     //console.log("NANO to pay: ",amountPay)
     return session.createPayment({
       amount: amountPay,
-      currency: 'NANO',
+      currency: "NANO",
       state: data,
     });
   }
@@ -123,7 +132,7 @@ export default function BuyingBanano({initialData}) {
         <form onSubmit={submitNanoPayment}>
         <div className="input-group">
             <span className="input-group-text">Receive BANANO at:</span>
-        <input className="form-control" type="text" name="coin_address_block" placeholder="ban_1burnbabyburndiscoinferno111111111111111111111111111aj49sw3w" autoComplete="on" pattern="^ban_[13][0-13-9a-km-uw-z]{59}$" size="75" required onChange={handleAddressChange} />
+        <input className="form-control" type="text" name="coin_address_block" placeholder="ban_" autoComplete="on" pattern="^ban_[13][0-13-9a-km-uw-z]{59}$" size="75" required onChange={handleAddressChange} />
         </div>
         <div className="input-group">
         <span className="input-group-text">BANANO to receive:</span>
@@ -159,7 +168,7 @@ export async function getStaticProps(context) {
   //console.log(process.env.BANANO_HOTWALLET_ACCOUNT_ONE);
   const balance_query = {
     "action": "account_balance",
-    "account": process.env.NANO_HOTWALLET_ACCOUNT_ONE
+    "account": process.env.BANANO_HOTWALLET_ACCOUNT_ONE
   };
 
   const banano_balance_lookup = await fetch(process.env.BANANO_WALLET_URL,{
@@ -171,9 +180,9 @@ export async function getStaticProps(context) {
     body: JSON.stringify(balance_query)
   });
   let banano_balance_response = await banano_balance_lookup.json();
-  console.log(banano_balance_response);
+  //console.log(banano_balance_response);
   let banano_balance = rawToBan(banano_balance_response.balance);
-  console.log(banano_balance);
+  //console.log(banano_balance);
   const MAX_BANANO_TRANS_SIZE = banano_balance*0.85;
   let usd_price_data = await usd_price_lookup.json();
   //console.log(usd_price_data);
@@ -207,13 +216,7 @@ export async function getStaticProps(context) {
     "nano_per_banano":(1/exchange_rate).toFixed(6),
     "banano_per_nano":how_many_banano_per_nano,
     };
-    /*
-  try {
-    initialData["address"] = (nano_address.account != null ? nano_address.account : "nano_1x9rjf8xnjffznaxd18n8rc1m396ao8ky1uqpmapdzat5npy11if4kuh4ubd");
-  } catch (err) {
-    console.error(err);
-  }
-  */
+
   if (!initialData) {
     return {
       notFound: true,

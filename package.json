@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@accept-banano/client": "^2.0.0",
     "@accept-nano/client": "^2.0.0",
     "@bananocoin/bananojs": "^2.4.4",
     "banano-unit-converter": "^0.1.0",
@@ -15,6 +16,7 @@
     "madge": "^4.0.2",
     "nano-unit-converter": "^2.0.0",
     "nanocurrency": "^2.5.0",
+    "nanopay": "^2.1.1",
     "next": "^10.0.8",
     "qrcode.react": "^1.0.1",
     "react": "17.0.1",

@@ -1,34 +1,41 @@
 import { useEffect, useState } from 'react';
 import styles from '../../styles/Selling.module.css';
 import * as nanocurrency from 'nanocurrency';
-
+import Router from 'next/router';
 import Link from 'next/link';
-import { rawToBan } from 'banano-unit-converter';
+import axios from 'axios';
 import { megaToRaw, rawToMega } from 'nano-unit-converter';
 
 let price_list = require( '../../libs/dummy.json');
-const acceptNano = require('@accept-nano/client');
+const acceptBanano = require('@accept-banano/client');
 
-function paymentSucceeded(amount, state) {
-  console.log("Amount: ",amount);
-  console.log("Payment state: ",state);
+async function paymentSucceeded({amount, state, data}) {
+  let exchangeAmount = data.amount * data.exchange_rate;
+  console.log(exchangeAmount);
+  console.log(state);
+  /*
+  const payment = await axios.post('/api/sendNano', {
+    amount: exchangeAmount,
+    destination: data.destination_address,
+    state: JSON.stringify(state)
+  });
+  */
 }
-
 
 export default function SellingBanano({initialData}) {
   const [data, setData] = useState(initialData);
   const [session, setSession] = useState(null);
 
-  function acceptNanoPreload(){
-    //console.log(data.acceptnano_api_host);
-    const session = acceptNano.createSession({
-      apiHost: data.acceptnano_api_host,
+  function acceptBananoPreload(){
+    //console.log(data.acceptbanano_api_host);
+    const session = acceptBanano.createSession({
+      apiHost: data.acceptbanano_api_host,
       debug: true,
     });
 
   session.on('start', () => {
     //BuyingBanano.paymentStarted();
-    console.log('ACCEPTNANO CLIENT EVENT: start')
+    console.log('acceptBanano CLIENT EVENT: start')
   });
   
   session.on('end', (error, payment) => {
@@ -39,9 +46,9 @@ export default function SellingBanano({initialData}) {
         console.log("User clicked the X, refreshing...");
         return Router.reload(window.location.pathname);
       }
-      return console.log('ACCEPTNANO Error: ',error.reason);
+      return console.log('acceptBanano Error: ',error.reason);
     }
-    console.log('ACCEPTNANO Success: ',payment);
+    console.log('acceptBanano Success: ',payment);
     
     return paymentSucceeded({
       amount: payment.amount,
@@ -54,7 +61,7 @@ export default function SellingBanano({initialData}) {
 
 useEffect(() => {
   if(session === null)
-    acceptNanoPreload();
+    acceptBananoPreload();
   });
 
   if (!price_list) return <div>Loading exchange rates...</div>
@@ -66,11 +73,11 @@ useEffect(() => {
     let requestedAmount = parseFloat(event.target.coin_amount.value);
     console.log("Dest address: ",dest_address);
     console.log("Requested amount of BANANO: ",requestedAmount);
-    let amountPay = requestedAmount*data.nano_per_banano;
-    console.log("NANO to pay: ",amountPay)
+    //let amountPay = requestedAmount/data.nano_per_banano;
+    let amountPay = requestedAmount;
+    console.log("BANANO to pay: ",amountPay)
     return session.createPayment({
       amount: amountPay,
-      currency: 'NANO',
       state: data,
     });
   }
@@ -100,8 +107,8 @@ useEffect(() => {
       localData.amount = e.target.value;
     }
     if(localData.amount > ceiling) {
-      e.target.value = ceiling;
-      localData.amount = ceiling;
+      e.target.value = ceiling.toFixed(6);
+      localData.amount = ceiling.toFixed(6);
     }
     e.target.form.nano_to_receive.placeholder = (localData.amount*data.banano_per_nano).toFixed(6);
     return setData(localData);
@@ -117,7 +124,7 @@ useEffect(() => {
         <form onSubmit={submitBananoPayment}>
         <div className="input-group">
             <span className="input-group-text">Receive NANO at:</span>
-        <input className="form-control" type="text" name="coin_address_block" placeholder="nano_1111111111111111111111111111111111111111111111111111hifc8npp" autoComplete="on" pattern="^ban_[13][0-13-9a-km-uw-z]{59}$" size="75" required onChange={handleAddressChange} />
+        <input className="form-control" type="text" name="coin_address_block" placeholder="nano_" autoComplete="on" pattern="^nano_[13][0-13-9a-km-uw-z]{59}$" size="75" required onChange={handleAddressChange} />
         </div>
         <div className="input-group">
         <span className="input-group-text">BANANO to sell:</span>
@@ -196,7 +203,7 @@ export async function getStaticProps(context) {
     "qr-fg":"#000000",
     "qr-bg":"#FFFFFF",
     "exchange_rate":exchange_rate,
-    "acceptnano_api_host": process.env.ACCEPTNANO_API_HOST,
+    "acceptbanano_api_host": process.env.ACCEPTBANANO_API_HOST,
     //"buy_rate": buy_rate,
     "nano_per_banano":(1/exchange_rate),
     "banano_per_nano":(exchange_rate/1),
