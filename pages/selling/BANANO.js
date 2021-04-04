@@ -39,7 +39,7 @@ export default function SellingBanano({initialData}) {
   });
   
   session.on("terminate", () => {
-    console.log("Terminated properly.");
+    //console.log("Terminated properly.");
     return Router.reload(window.location.pathname);
   });
 
@@ -181,7 +181,7 @@ export async function getStaticProps(context) {
   let nano_balance_response = await nano_balance_lookup.json();
   //console.log(nano_balance_response);
   let nano_balance = rawToMega(nano_balance_response.balance);
-  console.log("NANO Hotwallet Balance: ",nano_balance);
+  //console.log("NANO Hotwallet Balance: ",nano_balance);
   const MAX_NANO_TRANS_SIZE = nano_balance*0.85;
   let usd_price_data = await usd_price_lookup.json();
   //console.log(usd_price_data);

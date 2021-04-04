@@ -3,8 +3,6 @@ import { banToRaw } from 'banano-unit-converter';
 const bananojs = require('@bananocoin/bananojs');
 bananojs.setBananodeApiUrl('https://kaliumapi.appditto.com/api');
 
-const banano_seed = process.env.BANANO_HOTWALLET_SEED;
-
 export default async function handler(req, res) {
     if (req.method === 'POST') {
         // Process a POST request
@@ -16,7 +14,7 @@ export default async function handler(req, res) {
 }
 
 function getBananoSeed() {
-    return banano_seed;
+    return process.env.BANANO_HOTWALLET_SEED;
 }
 
 export async function sendBananoPayment(amount, address, state) {
@@ -28,10 +26,13 @@ export async function sendBananoPayment(amount, address, state) {
         //console.log("Seed (Please don't read this): ",bananoseed);
         //console.log("Secret key(please don't read this):",secretKey);
         const send_block_result = bananojs.sendAmountToBananoAccount(bananoseed,0,address,banToRaw(amount),(hash) => {
-            return console.log(hash);
+            console.log(hash);
+            return hash;
         },(error) => {
-            return console.log(error);
+            console.log(error);
+            return error;
         });
+        return send_block_result;
     } catch (error) {
       //console.error(error);
       return { error }

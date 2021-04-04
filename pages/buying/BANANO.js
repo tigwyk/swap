@@ -79,10 +79,10 @@ export default function BuyingBanano({initialData}) {
     event.preventDefault();
     let dest_address = event.target.coin_address_block.value;
     let requestedAmount = parseFloat(event.target.coin_amount.value);
-    console.log("Dest address: ",dest_address);
-    console.log("Requested amount of BANANO: ",requestedAmount);
+    //console.log("Dest address: ",dest_address);
+    //console.log("Requested amount of BANANO: ",requestedAmount);
     let amountPay = requestedAmount*data.nano_per_banano;
-    console.log("NANO to pay: ",amountPay)
+    //console.log("NANO to pay: ",amountPay)
     return session.createPayment({
       amount: amountPay,
       currency: "NANO",
