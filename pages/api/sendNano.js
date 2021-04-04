@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
 export async function sendNanoPayment(amount, address) {
     try {    
-        nanopay.init('https://proxy.powernode.cc/proxy', '');
+        nanopay.init('https://proxy.powernode.cc/proxy', process.env.NANO_WORK_SERVER);
         const nanoseed = getNanoSeed();
         const secretKey = await nanopay.gensecretKey(nanoseed, 0);
         //const from_address = await nanopay.secretKeytoaddr(secretKey);
