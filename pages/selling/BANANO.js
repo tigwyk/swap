@@ -38,6 +38,11 @@ export default function SellingBanano({initialData}) {
     console.log('acceptBanano CLIENT EVENT: start')
   });
   
+  session.on("terminate", () => {
+    console.log("Terminated properly.");
+    return Router.reload(window.location.pathname);
+  });
+
   session.on('end', (error, payment) => {
     if (error) {
       //return BuyingBanano.paymentFailed({ reason: error.reason })
