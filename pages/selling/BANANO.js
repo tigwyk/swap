@@ -10,21 +10,21 @@ let price_list = require( '../../libs/dummy.json');
 const acceptBanano = require('@accept-banano/client');
 
 async function paymentSucceeded({amount, state, data}) {
-  let exchangeAmount = data.amount * data.exchange_rate;
-  console.log(exchangeAmount);
-  console.log(state);
-  /*
+  let exchangeAmount = amount * data.exchange_rate;
+  console.log("NANO to receive: ",exchangeAmount);
+  
   const payment = await axios.post('/api/sendNano', {
     amount: exchangeAmount,
     destination: data.destination_address,
     state: JSON.stringify(state)
   });
-  */
+  //console.log(payment);
 }
 
 export default function SellingBanano({initialData}) {
   const [data, setData] = useState(initialData);
   const [session, setSession] = useState(null);
+  const [paymentState, setPaymentState] = useState(null);
 
   function acceptBananoPreload(){
     //console.log(data.acceptbanano_api_host);
@@ -53,6 +53,7 @@ export default function SellingBanano({initialData}) {
     return paymentSucceeded({
       amount: payment.amount,
       state: payment.state,
+      data: data
     });
     
   });
@@ -78,7 +79,8 @@ useEffect(() => {
     console.log("BANANO to pay: ",amountPay)
     return session.createPayment({
       amount: amountPay,
-      state: data,
+      currency: "BANANO",
+      state: paymentState,
     });
   }
 

@@ -26,6 +26,7 @@ async function paymentSucceeded({amount, state}) {
 export default function BuyingBanano({initialData}) {
   const [data, setData] = useState(initialData);
   const [session, setSession] = useState(null);
+  const [paymentState, setPaymentState] = useState(null);
   
   function acceptNanoPreload(){
     //console.log(data.acceptnano_api_host);
@@ -54,7 +55,7 @@ export default function BuyingBanano({initialData}) {
     return paymentSucceeded({
       amount: payment.amount,
       state: payment.state,
-      //data: data
+      data: data
     });
     
   });
@@ -76,16 +77,16 @@ export default function BuyingBanano({initialData}) {
 
   const submitNanoPayment = async (event) => {
     event.preventDefault();
-    //let dest_address = event.target.coin_address_block.value;
+    let dest_address = event.target.coin_address_block.value;
     let requestedAmount = parseFloat(event.target.coin_amount.value);
-    //console.log("Dest address: ",dest_address);
-    //console.log("Requested amount of BANANO: ",requestedAmount);
+    console.log("Dest address: ",dest_address);
+    console.log("Requested amount of BANANO: ",requestedAmount);
     let amountPay = requestedAmount*data.nano_per_banano;
-    //console.log("NANO to pay: ",amountPay)
+    console.log("NANO to pay: ",amountPay)
     return session.createPayment({
       amount: amountPay,
       currency: "NANO",
-      state: data,
+      state: paymentState,
     });
   }
 
@@ -186,15 +187,15 @@ export async function getStaticProps(context) {
   const MAX_BANANO_TRANS_SIZE = banano_balance*0.85;
   let usd_price_data = await usd_price_lookup.json();
   //console.log(usd_price_data);
-  //console.log("NANO: ",usd_price_data.nano.usd);
-  //console.log("BANANO: ",usd_price_data.banano.usd);
+  console.log("NANO: ",usd_price_data.nano.usd);
+  console.log("BANANO: ",usd_price_data.banano.usd);
   let how_many_nano_per_banano = usd_price_data.banano.usd / usd_price_data.nano.usd;
   let how_many_banano_per_nano = usd_price_data.nano.usd / usd_price_data.banano.usd;
-  //console.log("NANO/BANANO: ",how_many_nano_per_banano.toFixed(6));
-  //console.log("BANANO/NANO: ",how_many_banano_per_nano.toFixed(6));
+  console.log("NANO/BANANO: ",how_many_nano_per_banano.toFixed(6));
+  console.log("BANANO/NANO: ",how_many_banano_per_nano.toFixed(6));
   let exchange_rate = ((1/how_many_nano_per_banano)*.9).toFixed(6);
   //let buy_rate = ((how_many_banano_per_nano.toFixed(6))*0.95).toFixed(6);
-  //console.log("Exchange rate: ",exchange_rate);
+  console.log("Exchange rate: ",exchange_rate);
   //let nano_address = await generate_nano_address();
 
   let initialData = {

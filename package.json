@@ -8,7 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@accept-banano/client": "^2.0.0",
+    "@accept-banano/client": "^2.0.2",
     "@accept-nano/client": "^2.0.0",
     "@bananocoin/bananojs": "^2.4.4",
     "banano-unit-converter": "^0.1.0",

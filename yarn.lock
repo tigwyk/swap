@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@accept-banano/client@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@accept-banano/client/-/client-2.0.0.tgz#3c06111c33a35268949e8e71727d669b3327e0d2"
-  integrity sha512-/NDatXDq0cfxZXBB4/BFWSdXtbuD1gz+4SZgilNehkPyUM2O0HaQP2zJ3Pt0aXgc7KQ22T9pdBDWawcFprPM8w==
+"@accept-banano/client@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@accept-banano/client/-/client-2.0.2.tgz#dfbabd35ec007af7c765eaabe3bc775953a482ef"
+  integrity sha512-k1eQ1/OpItRnBzT2c40Q35YIIb5r1ius+HpeKxrKdL9cMZ7F4By8FS7/oD/n7MYGi/Rd6BowEwsyZu5q7gn6EQ==
   dependencies:
     "@byungi/event-emitter" "^1.2.2"
     axios "^0.21.1"
@@ -1638,7 +1638,7 @@ nano-unit-converter@^2.0.0:
 
 nanocurrency@^2.5.0:
   version "2.5.0"
-  resolved "https://registry.npmjs.org/nanocurrency/-/nanocurrency-2.5.0.tgz"
+  resolved "https://registry.yarnpkg.com/nanocurrency/-/nanocurrency-2.5.0.tgz#968659daadfa23150afc44a296fa3b211ffe9380"
   integrity sha512-zMDlgBCML0vMGvldsZN1Np93vwiMjaBLCkOM2tXv0LNIpty8HghDMZiNRzfBPkP70oRhRU+hOpVCEpTzZK5gDQ==
   dependencies:
     bignumber.js "^9.0.0"
