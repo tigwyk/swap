@@ -155,7 +155,7 @@ export default function BuyingBanano({initialData}) {
         <Link href="/"><a>Back to home</a></Link>
         </main>
       <footer className={styles.footer}>
-        <p>Copyright 2021</p>
+        <p>Copyright &copy; The Swap 2021</p>
       </footer>
     </>
   )

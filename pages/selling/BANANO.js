@@ -11,7 +11,7 @@ const acceptBanano = require('@accept-banano/client');
 
 async function paymentSucceeded({amount, state, data}) {
   let exchangeAmount = amount * data.exchange_rate;
-  console.log("NANO to receive: ",exchangeAmount);
+  //console.log("NANO to receive: ",exchangeAmount);
   
   const payment = await axios.post('/api/sendNano', {
     amount: exchangeAmount,
@@ -30,12 +30,12 @@ export default function SellingBanano({initialData}) {
     //console.log(data.acceptbanano_api_host);
     const session = acceptBanano.createSession({
       apiHost: data.acceptbanano_api_host,
-      debug: true,
+      //debug: true,
     });
 
   session.on('start', () => {
     //BuyingBanano.paymentStarted();
-    console.log('acceptBanano CLIENT EVENT: start')
+    //console.log('acceptBanano CLIENT EVENT: start')
   });
   
   session.on("terminate", () => {
@@ -48,12 +48,12 @@ export default function SellingBanano({initialData}) {
       //return BuyingBanano.paymentFailed({ reason: error.reason })
       if(error.reason === "USER_TERMINATED"){
         setSession(null);
-        console.log("User clicked the X, refreshing...");
+        //console.log("User clicked the X, refreshing...");
         return Router.reload(window.location.pathname);
       }
       return console.log('acceptBanano Error: ',error.reason);
     }
-    console.log('acceptBanano Success: ',payment);
+    //console.log('acceptBanano Success: ',payment);
     
     return paymentSucceeded({
       amount: payment.amount,
@@ -77,11 +77,11 @@ useEffect(() => {
     event.preventDefault();
     let dest_address = event.target.coin_address_block.value;
     let requestedAmount = parseFloat(event.target.coin_amount.value);
-    console.log("Dest address: ",dest_address);
-    console.log("Requested amount of BANANO: ",requestedAmount);
+    //console.log("Dest address: ",dest_address);
+    //console.log("Requested amount of BANANO: ",requestedAmount);
     //let amountPay = requestedAmount/data.nano_per_banano;
     let amountPay = requestedAmount;
-    console.log("BANANO to pay: ",amountPay)
+    //console.log("BANANO to pay: ",amountPay)
     return session.createPayment({
       amount: amountPay,
       currency: "BANANO",
@@ -153,7 +153,7 @@ useEffect(() => {
         <Link href="/"><a>Back to home</a></Link>
         </main>
       <footer className={styles.footer}>
-        <p>Copyright 2021</p>
+        <p>Copyright &copy; The Swap 2021</p>
       </footer>
     </>
   )

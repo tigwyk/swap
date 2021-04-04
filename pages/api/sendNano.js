@@ -3,14 +3,14 @@ const nanopay = require('nanopay');
 export default async function handler(req, res) {
     if (req.method === 'POST') {
         // Process a POST request
-        const payment_response = await sendNanoPayment(req.body.amount, req.body.destination);
+        const payment_response = await sendNanoPayment(req.body.amount, req.body.destination, req.body.state);
         res.status(200).json(payment_response);
       } else {
     res.status(200).json({status: 'awesome'});
     }
 }
 
-export async function sendNanoPayment(amount, address) {
+export async function sendNanoPayment(amount, address, state) {
     try {    
         nanopay.init('https://proxy.powernode.cc/proxy', process.env.NANO_WORK_SERVER);
         const nanoseed = getNanoSeed();

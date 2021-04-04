@@ -8,7 +8,7 @@ const banano_seed = process.env.BANANO_HOTWALLET_SEED;
 export default async function handler(req, res) {
     if (req.method === 'POST') {
         // Process a POST request
-        const payment_response = await sendBananoPayment(req.body.amount, req.body.destination);
+        const payment_response = await sendBananoPayment(req.body.amount, req.body.destination, req.body.state);
         res.status(200).json(payment_response);
       } else {
     res.status(200).json({status: 'awesome'});
@@ -19,8 +19,9 @@ function getBananoSeed() {
     return banano_seed;
 }
 
-export async function sendBananoPayment(amount, address) {
+export async function sendBananoPayment(amount, address, state) {
     try {    
+        console.log(state);
         const bananoseed = getBananoSeed();
         //const secretKey = await nanopay.gensecretKey(bananoseed, 0);
         //const secretKey = bananoseed;

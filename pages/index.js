@@ -21,7 +21,7 @@ export default function Home({local_prices,data}) {
       </main>
 
       <footer className={styles.footer}>
-        <p>Copyright 2021 | {data.joke}</p>
+        <p>Copyright &copy; The Swap 2021 | {data.joke}</p>
       </footer>
     </div>
   )

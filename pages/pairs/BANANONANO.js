@@ -34,6 +34,7 @@ export default function BananoNano({prices}) {
         <Link href="/"><a>Back to home</a></Link>
         </main>
       <footer className={styles.footer}>
+      <p>Copyright &copy; The Swap 2021</p>
       </footer>
     </>
   )
