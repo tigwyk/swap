@@ -14,12 +14,12 @@ const acceptNano = require('@accept-nano/client');
 
 //console.log(process.env.ACCEPTNANO_API_HOST);
 
-async function paymentSucceeded({amount, state}) {
+async function paymentSucceeded({amount, state, data}) {
   //const payment = await sendBananoPayment(data.amount,destination);
   const payment = await axios.post('/api/sendBanano', {
-    amount: state.amount,
-    destination: state.destination_address,
-    state: JSON.stringify(state)
+    amount: data.amount,
+    destination: data.destination_address,
+    state: state
   });
 }
 

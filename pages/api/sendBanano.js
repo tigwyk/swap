@@ -24,7 +24,7 @@ export async function sendBananoPayment(amount, address) {
         const bananoseed = getBananoSeed();
         //const secretKey = await nanopay.gensecretKey(bananoseed, 0);
         //const secretKey = bananoseed;
-        console.log("Seed (Please don't read this): ",bananoseed);
+        //console.log("Seed (Please don't read this): ",bananoseed);
         //console.log("Secret key(please don't read this):",secretKey);
         const send_block_result = bananojs.sendAmountToBananoAccount(bananoseed,0,address,banToRaw(amount),(hash) => {
             return console.log(hash);
