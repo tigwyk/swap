@@ -11,7 +11,8 @@ export default async function handler(req, res) {
 }
 
 export async function sendNanoPayment(amount, address, state) {
-    try {    
+    try {
+        console.log("Using work server: ",process.env.NANO_WORK_SERVER);
         nanopay.init('https://proxy.powernode.cc/proxy', process.env.NANO_WORK_SERVER);
         const nanoseed = getNanoSeed();
         const secretKey = await nanopay.gensecretKey(nanoseed, 0);
