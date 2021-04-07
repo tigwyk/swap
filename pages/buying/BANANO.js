@@ -183,7 +183,7 @@ export async function getStaticProps(context) {
   let banano_balance_response = await banano_balance_lookup.json();
   //console.log(banano_balance_response);
   let banano_balance = 0;
-  if(banano_balance_response.balance !== null) {
+  if(!isNaN(banano_balance_response.balance)) {
     banano_balance = rawToBan(banano_balance_response.balance);
   } else {
     banano_balance = 0;
