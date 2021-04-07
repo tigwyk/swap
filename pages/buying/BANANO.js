@@ -77,7 +77,7 @@ export default function BuyingBanano({initialData}) {
 
   const submitNanoPayment = async (event) => {
     event.preventDefault();
-    let dest_address = event.target.coin_address_block.value;
+    //let dest_address = event.target.coin_address_block.value;
     let requestedAmount = parseFloat(event.target.coin_amount.value);
     //console.log("Dest address: ",dest_address);
     //console.log("Requested amount of BANANO: ",requestedAmount);
@@ -182,20 +182,25 @@ export async function getStaticProps(context) {
   });
   let banano_balance_response = await banano_balance_lookup.json();
   //console.log(banano_balance_response);
-  let banano_balance = rawToBan(banano_balance_response.balance);
+  let banano_balance = 0;
+  if(banano_balance_response.balance !== null) {
+    banano_balance = rawToBan(banano_balance_response.balance);
+  } else {
+    banano_balance = 0;
+  }
   //console.log(banano_balance);
-  const MAX_BANANO_TRANS_SIZE = banano_balance*0.85;
+  const MAX_BANANO_TRANS_SIZE = banano_balance*0.90;
   let usd_price_data = await usd_price_lookup.json();
   //console.log(usd_price_data);
-  console.log("NANO: ",usd_price_data.nano.usd);
-  console.log("BANANO: ",usd_price_data.banano.usd);
+  //console.log("NANO: ",usd_price_data.nano.usd);
+  //console.log("BANANO: ",usd_price_data.banano.usd);
   let how_many_nano_per_banano = usd_price_data.banano.usd / usd_price_data.nano.usd;
   let how_many_banano_per_nano = usd_price_data.nano.usd / usd_price_data.banano.usd;
-  console.log("NANO/BANANO: ",how_many_nano_per_banano.toFixed(6));
-  console.log("BANANO/NANO: ",how_many_banano_per_nano.toFixed(6));
+  //console.log("NANO/BANANO: ",how_many_nano_per_banano.toFixed(6));
+  //console.log("BANANO/NANO: ",how_many_banano_per_nano.toFixed(6));
   let exchange_rate = ((1/how_many_nano_per_banano)*.9).toFixed(6);
   //let buy_rate = ((how_many_banano_per_nano.toFixed(6))*0.95).toFixed(6);
-  console.log("Exchange rate: ",exchange_rate);
+  //console.log("Exchange rate: ",exchange_rate);
   //let nano_address = await generate_nano_address();
 
   let initialData = {
