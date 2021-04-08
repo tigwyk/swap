@@ -9,7 +9,7 @@ import axios from 'axios';
 const bananojs = require('@bananocoin/bananojs');
 import { rawToBan } from 'banano-unit-converter';
 
-let price_list = require( '../../libs/dummy.json');
+import {updatePriceList} from '../api/prices'
 const acceptNano = require('@accept-nano/client');
 
 //console.log(process.env.ACCEPTNANO_API_HOST);
@@ -72,8 +72,7 @@ export default function BuyingBanano({initialData}) {
   });
  
 
-  if (!price_list) return <div>Loading exchange rates...</div>
-  //console.log(price_list);
+  if (!data.buy_rate) return <div>Loading exchange rates...</div>
 
   const submitNanoPayment = async (event) => {
     event.preventDefault();
@@ -81,7 +80,7 @@ export default function BuyingBanano({initialData}) {
     let requestedAmount = parseFloat(event.target.coin_amount.value);
     //console.log("Dest address: ",dest_address);
     //console.log("Requested amount of BANANO: ",requestedAmount);
-    let amountPay = requestedAmount*data.nano_per_banano;
+    let amountPay = requestedAmount*data.buy_rate;
     //console.log("NANO to pay: ",amountPay)
     return session.createPayment({
       amount: amountPay,
@@ -117,7 +116,7 @@ export default function BuyingBanano({initialData}) {
       e.target.value = ceiling;
       localData.amount = ceiling;
     }
-    e.target.form.nano_to_pay.placeholder = (localData.amount*data.nano_per_banano).toFixed(6);
+    e.target.form.nano_to_pay.placeholder = (localData.amount*data.buy_rate).toFixed(6);
     return setData(localData);
   }
 
@@ -127,8 +126,8 @@ export default function BuyingBanano({initialData}) {
         <h3 className={styles.title}>
           Buy BANANO
         </h3>
-        <h4>@ {(1/data.exchange_rate).toFixed(6)} NANO/per</h4>
-        <p>1 BANANO = ~{data.nano_per_banano} NANO</p>
+        <h4>@ {data.buy_rate} NANO/per</h4>
+        <p>~{(1/data.buy_rate).toFixed(6)} BANANO = 1 NANO</p>
         <small>Max. {data.max_banano_transaction_size} BANANO</small>
         <form onSubmit={submitNanoPayment}>
         <div className="input-group">
@@ -137,12 +136,12 @@ export default function BuyingBanano({initialData}) {
         </div>
         <div className="input-group">
         <span className="input-group-text">BANANO to receive:</span>
-        <input className="form-control" name="coin_amount" placeholder={data.banano_per_nano.toFixed(6)} onChange={handleAmountChange} />
+        <input className="form-control" name="coin_amount" placeholder={1/data.buy_rate} onChange={handleAmountChange} />
         
         </div>
         <div className="input-group">
         <span className="input-group-text">NANO to pay:</span>
-          <input className="form-control" name="nano_to_pay" type="text" placeholder={(data.amount*data.nano_per_banano).toFixed(6)} readOnly />
+          <input className="form-control" name="nano_to_pay" type="text" placeholder={1} readOnly />
           
         </div>
         <center>
@@ -162,11 +161,7 @@ export default function BuyingBanano({initialData}) {
 };
 
 export async function getStaticProps(context) {
-  let usd_price_lookup = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=nano,banano&vs_currencies=usd");
-  //let banano_balance = await fetch("https://api-beta.banano.cc?");
-  //let nano_balance = await fetch("https://proxy.powernode.cc/proxy?action=");
-
-  //console.log(process.env.BANANO_HOTWALLET_ACCOUNT_ONE);
+  const price_list = await updatePriceList();
   const balance_query = {
     "action": "account_balance",
     "account": process.env.BANANO_HOTWALLET_ACCOUNT_ONE
@@ -189,19 +184,7 @@ export async function getStaticProps(context) {
     banano_balance = 0;
   }
   //console.log(banano_balance);
-  const MAX_BANANO_TRANS_SIZE = banano_balance*0.90;
-  let usd_price_data = await usd_price_lookup.json();
-  //console.log(usd_price_data);
-  //console.log("NANO: ",usd_price_data.nano.usd);
-  //console.log("BANANO: ",usd_price_data.banano.usd);
-  let how_many_nano_per_banano = usd_price_data.banano.usd / usd_price_data.nano.usd;
-  let how_many_banano_per_nano = usd_price_data.nano.usd / usd_price_data.banano.usd;
-  //console.log("NANO/BANANO: ",how_many_nano_per_banano.toFixed(6));
-  //console.log("BANANO/NANO: ",how_many_banano_per_nano.toFixed(6));
-  let exchange_rate = ((1/how_many_nano_per_banano)*.9).toFixed(6);
-  //let buy_rate = ((how_many_banano_per_nano.toFixed(6))*0.95).toFixed(6);
-  //console.log("Exchange rate: ",exchange_rate);
-  //let nano_address = await generate_nano_address();
+  const MAX_BANANO_TRANS_SIZE = banano_balance*0.40;
 
   let initialData = {
     "id":"banano-button",
@@ -216,11 +199,9 @@ export async function getStaticProps(context) {
     "qr-level":"M",
     "qr-fg":"#000000",
     "qr-bg":"#FFFFFF",
-    "exchange_rate":exchange_rate,
+    "sell_rate":price_list.sell.banano.nano,
     "acceptnano_api_host": process.env.ACCEPTNANO_API_HOST,
-    //"buy_rate": buy_rate,
-    "nano_per_banano":(1/exchange_rate).toFixed(6),
-    "banano_per_nano":how_many_banano_per_nano,
+    "buy_rate": price_list.buy.banano.nano,
     };
 
   if (!initialData) {

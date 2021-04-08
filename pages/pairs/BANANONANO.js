@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import styles from '../../styles/Pairs.module.css'
-let price_list = require( '../../libs/dummy.json');
+import {updatePriceList} from '../api/prices'
 
 export function BuyCard(props) {
   return <Link href={"/buying/"+props.base}>
@@ -25,11 +25,14 @@ export default function BananoNano({prices}) {
     <>
       <main className={styles.main}>
         <h3 className={styles.title}>
-          Swap NANO/BANANO
+          Buy or Sell BANANO for NANO
         </h3>
         <div className={styles.grid}> 
-        <BuyCard quote="NANO" base="BANANO" price={prices.buy.banano.nano}/>
-        <SellCard quote="NANO" base="BANANO" price={prices.sell.banano.nano}/>
+
+            <BuyCard quote="NANO" base="BANANO" price={prices.buy.banano.nano}/>
+
+            <SellCard quote="NANO" base="BANANO" price={prices.sell.banano.nano}/>
+
         </div>
         <Link href="/"><a>Back to home</a></Link>
         </main>
@@ -41,7 +44,10 @@ export default function BananoNano({prices}) {
 }
 
 export async function getStaticProps(context) {
-  let prices = price_list;
+  const updatePrices = await updatePriceList();
+  console.log(updatePrices);
+  
+  let prices = updatePrices;
   if (!prices) {
     return {
       notFound: true,
