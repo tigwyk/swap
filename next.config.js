@@ -11,6 +11,7 @@ module.exports = {
             net: 'empty',
             tls: 'empty'
         }
+        
         return config
     },
     webpackDevMiddleware: config => {

@@ -6,17 +6,26 @@ import Link from 'next/link';
 import axios from 'axios';
 import { megaToRaw, rawToMega } from 'nano-unit-converter';
 import {updatePriceList} from '../api/prices'
+import WASMPoW from '../../libs/wasmpow.js';
+
+//WASMPoW();
 
 const acceptBanano = require('@accept-banano/client');
 
 async function paymentSucceeded({amount, state, data}) {
-  let exchangeAmount = amount * data.exchange_rate;
-  //console.log("NANO to receive: ",exchangeAmount);
-  
+  var ComputeWorkParams;
+  const exchangeAmount = data.send_amount;
+  console.log("NANO to receive: ",exchangeAmount);
+  console.log("Current difficulty: ",data.difficulty);
+  //const cached_work = await nanocurrency.computeWork(data.frontier, ComputeWorkParams = { workThreshold: data.difficulty });
+  const cached_work = await WASMPoW(data.frontier);
+  console.log("Computed work: ",cached_work);
+  console.log("Sending payment call to API:",exchangeAmount,data.destination_address,JSON.stringify(state),cached_work);
   const payment = await axios.post('/api/sendNano', {
     amount: exchangeAmount,
     destination: data.destination_address,
-    state: JSON.stringify(state)
+    state: JSON.stringify(state),
+    work: cached_work
   });
   //console.log(payment);
 }
@@ -118,6 +127,7 @@ useEffect(() => {
       localData.amount = ceiling.toFixed(6);
     }
     e.target.form.nano_to_receive.placeholder = (localData.amount*(data.sell_rate)).toFixed(6);
+    localData.send_amount = e.target.form.nano_to_receive.placeholder;
     return setData(localData);
   } 
   return (
@@ -160,20 +170,49 @@ useEffect(() => {
 };
 
 export async function getStaticProps(context) {
+  const previous_block_response = await fetch(process.env.NANO_WALLET_URL, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+    "API_key":process.env.NOWNODES_API_KEY,
+    "action":"account_info",
+    "account":process.env.NANO_HOTWALLET_ACCOUNT_ONE
+    })
+  });
+  const previous_block = await previous_block_response.json();
+  console.log("Hotwallet frontier: ",previous_block.frontier);
+
+  const active_difficulty_repsonse = await fetch(process.env.NANO_WALLET_URL, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+    "API_key":process.env.NOWNODES_API_KEY,
+    "action":"active_difficulty"
+    })
+  });
+  const active_difficulty = await active_difficulty_repsonse.json();
+  console.log("Current difficulty: ",active_difficulty);
+  
   const price_list = await updatePriceList();
   //console.log(process.env.BANANO_HOTWALLET_ACCOUNT_ONE);
-  const balance_query = {
-    "action": "account_balance",
-    "account": process.env.NANO_HOTWALLET_ACCOUNT_ONE
-  };
-
+  
   const nano_balance_lookup = await fetch(process.env.NANO_WALLET_URL,{
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(balance_query)
+    body: JSON.stringify({
+      "action": "account_balance",
+      "account": process.env.NANO_HOTWALLET_ACCOUNT_ONE,
+      "API_key": process.env.NOWNODES_API_KEY
+    })
   });
   let nano_balance_response = await nano_balance_lookup.json();
   //console.log(nano_balance_response);
@@ -196,7 +235,9 @@ export async function getStaticProps(context) {
     "qr-bg":"#FFFFFF",
     "buy_rate":price_list.buy.banano.nano,
     "acceptbanano_api_host": process.env.ACCEPTBANANO_API_HOST,
-    "sell_rate": price_list.sell.banano.nano
+    "sell_rate": price_list.sell.banano.nano,
+    "frontier":previous_block.frontier,
+    "difficulty":active_difficulty.network_current
     };
     /*
   try {

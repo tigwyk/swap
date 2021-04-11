@@ -1,7 +1,7 @@
 const nanopay = require('nanopay');
 import { banToRaw } from 'banano-unit-converter';
 const bananojs = require('@bananocoin/bananojs');
-bananojs.setBananodeApiUrl('https://kaliumapi.appditto.com/api');
+bananojs.setBananodeApiUrl(process.env.BANANO_WALLET_URL);
 
 export default async function handler(req, res) {
     if (req.method === 'POST') {
@@ -38,3 +38,4 @@ export async function sendBananoPayment(amount, address, state) {
       return { error }
     }
   }
+  
