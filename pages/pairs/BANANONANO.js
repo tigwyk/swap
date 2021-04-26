@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import styles from '../../styles/Pairs.module.css'
+import {updatePriceList} from '../api/prices'
 
 export function BuyCard(props) {
   return <Link href={"/buying/"+props.base}>
@@ -24,36 +25,29 @@ export default function BananoNano({prices}) {
     <>
       <main className={styles.main}>
         <h3 className={styles.title}>
-          Swap NANO/BANANO
+          Buy or Sell BANANO for NANO
         </h3>
         <div className={styles.grid}> 
-        <BuyCard quote="NANO" base="BANANO" price={prices.buy.banano.nano}/>
-        <SellCard quote="NANO" base="BANANO" price={prices.sell.banano.nano}/>
+
+            <BuyCard quote="NANO" base="BANANO" price={prices.buy.banano.nano}/>
+
+            <SellCard quote="NANO" base="BANANO" price={prices.sell.banano.nano}/>
+
         </div>
         <Link href="/"><a>Back to home</a></Link>
         </main>
       <footer className={styles.footer}>
+      <p>Copyright &copy; The Swap 2021</p>
       </footer>
     </>
   )
 }
 
 export async function getStaticProps(context) {
-  const prices = {
-    "sell": {
-      "banano": { 
-        "nano":'0.00235000',
-        "moon" : "99999999999",
-      }
-    },
-    "buy" :{ 
-      "banano":{
-        "nano": '0.00296340',
-        "moon" : "999999999999"
-      }
-    }
-  }
-
+  const updatePrices = await updatePriceList();
+  console.log(updatePrices);
+  
+  let prices = updatePrices;
   if (!prices) {
     return {
       notFound: true,
