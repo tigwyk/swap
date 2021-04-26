@@ -3,7 +3,6 @@ import styles from '../../styles/Selling.module.css';
 import * as nanocurrency from 'nanocurrency';
 import Link from 'next/link';
 import Router from 'next/router';
-import {sendBananoPayment} from '../api/sendBanano';
 import axios from 'axios';
 
 const bananojs = require('@bananocoin/bananojs');
@@ -178,7 +177,7 @@ export async function getStaticProps(context) {
   let banano_balance_response = await banano_balance_lookup.json();
   //console.log(banano_balance_response);
   let banano_balance = 0;
-  if(!isNaN(banano_balance_response.balance)) {
+  if(!isNaN(banano_balance_response.balance) && banano_balance_response.balance > 0) {
     banano_balance = rawToBan(banano_balance_response.balance);
   } else {
     banano_balance = 0;

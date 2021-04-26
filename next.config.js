@@ -10,8 +10,8 @@ module.exports = {
             fs: 'empty',
             net: 'empty',
             tls: 'empty'
-        }
-        
+        };
+        config.output.webassemblyModuleFilename = 'wasmpow.wasm';
         return config
     },
     webpackDevMiddleware: config => {
