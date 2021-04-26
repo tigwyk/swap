@@ -2,7 +2,7 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 
-export default function Home({prices,data}) {
+export default function Home({local_prices,data}) {
   return (
     <div className={styles.container}>
       <Head>
@@ -16,13 +16,12 @@ export default function Home({prices,data}) {
         </h1>
 
         <div className={styles.grid}>
-          <PairCard quote="NANO" base="BANANO" buy={prices.buy.banano.nano} sell={prices.sell.banano.nano}></PairCard>
-          <PairCard quote="NANO" base="MOON" buy={prices.buy.moon.nano} sell={prices.sell.moon.nano}></PairCard>
+          <PairCard quote="NANO" base="BANANO" buy={local_prices.buy.banano.nano} sell={local_prices.sell.banano.nano}></PairCard>
         </div>
       </main>
 
       <footer className={styles.footer}>
-        <p>Copyright 2021 | {data.joke}</p>
+        <p>Copyright &copy; The Swap 2021 | {data.joke}</p>
       </footer>
     </div>
   )
@@ -47,9 +46,8 @@ export async function getStaticProps(context) {
     'Accept': 'application/json'
    }});
   const data = await res.json();
-  console.log(data);
 
-  const prices = { 
+  const local_prices = { 
     "sell": {
       "banano": { 
         "nano":'0.00235000',
@@ -71,9 +69,6 @@ export async function getStaticProps(context) {
     }
     };
 
-  console.log(prices.nanobanano);
-  console.log(prices.bananonano);
-
   if (!data) {
     return {
       notFound: true,
@@ -82,7 +77,7 @@ export async function getStaticProps(context) {
 
   return {
     props: { 
-      prices,
+      local_prices,
       data,
      }, 
   }
