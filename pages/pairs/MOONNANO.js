@@ -27,8 +27,8 @@ export default function BananoNano({prices}) {
           Swap NANO/BANANO
         </h3>
         <div className={styles.grid}> 
-        <BuyCard quote="NANO" base="BANANO" price={prices.buy.banano.nano}/>
-        <SellCard quote="NANO" base="BANANO" price={prices.sell.banano.nano}/>
+        <BuyCard quote="NANO" base="MOON" price={prices.buy.moon.nano}/>
+        <SellCard quote="NANO" base="MOON" price={prices.sell.moon.nano}/>
         </div>
         <Link href="/"><a>Back to home</a></Link>
         </main>
@@ -41,15 +41,18 @@ export default function BananoNano({prices}) {
 export async function getStaticProps(context) {
   const prices = {
     "sell": {
-      "banano": { 
-        "nano":'0.00235000',
-        "moon" : "99999999999",
+      "moon": { 
+        "nano":'0.01008179',
+        "banano" : "99999999999",
       }
     },
     "buy" :{ 
-      "banano":{
-        "nano": '0.00296340',
-        "moon" : "999999999999"
+      "nano":{
+        "banano": '0.00235000',
+        "moon" : "0."
+      },
+      "moon":{
+        "nano" : "0.01180028",
       }
     }
   }

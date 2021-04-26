@@ -1,8 +1,7 @@
 import '../styles/globals.css'
-import '../styles/bootstrap.min.css'
 
-function NanoSwap({ Component, pageProps }) {
+function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />
 }
 
-export default NanoSwap
+export default MyApp

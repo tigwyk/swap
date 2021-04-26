@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import styles from '../../styles/Pairs.module.css'
 
-export default function SellingBanano({prices,data}) {
+export default function SellingNano({prices,data}) {
   return (
     <>
       <main className={styles.main}>
         <h3 className={styles.title}>
-          Sell BANANO
+          Sell NANO
         </h3>
         
 
