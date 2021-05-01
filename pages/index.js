@@ -6,7 +6,7 @@ export default function Home({local_prices,data}) {
   return (
     <div className={styles.container}>
       <Head>
-        <title>The Swap</title>
+        <title>The Nano Swap</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
