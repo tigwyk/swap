@@ -18,8 +18,9 @@ async function paymentSucceeded({amount, state, data}) {
   console.log("NANO to receive: ",exchangeAmount);
   console.log("Current difficulty: ",data.difficulty);
   console.log("Before time: ",beforeTimestamp);
-  const cached_work = await nanocurrency.computeWork(data.frontier, ComputeWorkParams = { workThreshold: data.difficulty });
+  //const cached_work = await nanocurrency.computeWork(data.frontier, ComputeWorkParams = { workThreshold: data.difficulty });
   //const cached_work = await WASMPoW(data.frontier);
+  const cached_work = "";
   const afterTimestamp = Date.now();
   console.log("After time: ",afterTimestamp);
   const timeSpentComputing = (afterTimestamp - beforeTimestamp)/1000;
