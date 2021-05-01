@@ -25,6 +25,7 @@ async function paymentSucceeded({amount, state, data}) {
   //console.log("Compute time: ",timeSpentComputing,"s");
   //console.log("Computed work: ",cached_work);
   //console.log("Sending payment call to API:",exchangeAmount,data.destination_address,JSON.stringify(state),cached_work);
+  Router.push('/success');
   const payment = await axios.post('/api/sendNano', {
     amount: exchangeAmount,
     destination: data.destination_address,
@@ -32,7 +33,7 @@ async function paymentSucceeded({amount, state, data}) {
     work: cached_work
   });
   //console.log(payment);
-  Router.push('/success');
+  
 }
 
 export default function SellingBanano({initialData}) {
