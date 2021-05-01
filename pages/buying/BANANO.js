@@ -15,12 +15,12 @@ const acceptNano = require('@accept-nano/client');
 
 async function paymentSucceeded({amount, state, data}) {
   //const payment = await sendBananoPayment(data.amount,destination);
+  Router.push('/success');
   const payment = await axios.post('/api/sendBanano', {
     amount: data.amount,
     destination: data.destination_address,
     state: state
   });
-  Router.push('/success');
 }
 
 export default function BuyingBanano({initialData}) {
