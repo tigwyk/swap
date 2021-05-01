@@ -20,6 +20,7 @@ async function paymentSucceeded({amount, state, data}) {
     destination: data.destination_address,
     state: state
   });
+  Router.push('/success');
 }
 
 export default function BuyingBanano({initialData}) {
