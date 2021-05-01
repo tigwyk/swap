@@ -56,6 +56,8 @@ export default function SellingBanano({initialData}) {
     return Router.reload(window.location.pathname);
   });
 
+  
+
   session.on('end', (error, payment) => {
     if (error) {
       //return BuyingBanano.paymentFailed({ reason: error.reason })
@@ -68,13 +70,14 @@ export default function SellingBanano({initialData}) {
     }
     //console.log('acceptBanano Success: ',payment);
     
-    return await paymentSucceeded({
+    return paymentSucceeded({
       amount: payment.amount,
       state: payment.state,
       data: data
     });
     
   });
+
   setSession(session);  
 }
 
