@@ -43,7 +43,7 @@ export default function SellingBanano({initialData}) {
     //console.log(data.acceptbanano_api_host);
     const session = acceptBanano.createSession({
       apiHost: data.acceptbanano_api_host,
-      //debug: true,
+      debug: true,
     });
 
   session.on('start', () => {
@@ -56,7 +56,7 @@ export default function SellingBanano({initialData}) {
     return Router.reload(window.location.pathname);
   });
 
-  
+
 
   session.on('end', (error, payment) => {
     if (error) {
