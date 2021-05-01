@@ -15,16 +15,16 @@ async function paymentSucceeded({amount, state, data}) {
   const exchangeAmount = data.send_amount;
   console.log("NANO to receive: ",exchangeAmount);
   console.log("Current difficulty: ",data.difficulty);
-  console.log("Before time: ",beforeTimestamp);
+  //console.log("Before time: ",beforeTimestamp);
   //const cached_work = await nanocurrency.computeWork(data.frontier, ComputeWorkParams = { workThreshold: data.difficulty });
   
   const cached_work = "";
   const afterTimestamp = Date.now();
-  console.log("After time: ",afterTimestamp);
+  //console.log("After time: ",afterTimestamp);
   const timeSpentComputing = (afterTimestamp - beforeTimestamp)/1000;
-  console.log("Compute time: ",timeSpentComputing,"s");
-  console.log("Computed work: ",cached_work);
-  console.log("Sending payment call to API:",exchangeAmount,data.destination_address,JSON.stringify(state),cached_work);
+  //console.log("Compute time: ",timeSpentComputing,"s");
+  //console.log("Computed work: ",cached_work);
+  //console.log("Sending payment call to API:",exchangeAmount,data.destination_address,JSON.stringify(state),cached_work);
   const payment = await axios.post('/api/sendNano', {
     amount: exchangeAmount,
     destination: data.destination_address,
@@ -32,7 +32,7 @@ async function paymentSucceeded({amount, state, data}) {
     work: cached_work
   });
   //console.log(payment);
-  Router.reload('/success');
+  Router.push('/success');
 }
 
 export default function SellingBanano({initialData}) {

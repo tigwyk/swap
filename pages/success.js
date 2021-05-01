@@ -14,7 +14,7 @@ export default function Success() {
         <h1 className={styles.title}>
           Welcome to the swap!
         </h1>
-<p>Sending funds...</p>
+<h1>We're sending your funds...</h1>
       </main>
 
       <footer className={styles.footer}>
