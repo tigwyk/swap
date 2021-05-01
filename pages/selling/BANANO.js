@@ -32,6 +32,7 @@ async function paymentSucceeded({amount, state, data}) {
     work: cached_work
   });
   //console.log(payment);
+  Router.reload('/success');
 }
 
 export default function SellingBanano({initialData}) {
@@ -170,7 +171,7 @@ useEffect(() => {
         <Link href="/"><a>Back to home</a></Link>
         </main>
       <footer className={styles.footer}>
-        <p>Copyright &copy; The Swap 2021</p>
+        <p>Copyright &copy; The Nano Swap 2021</p>
       </footer>
     </>
   )
