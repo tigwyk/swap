@@ -6,9 +6,7 @@ import Link from 'next/link';
 import axios from 'axios';
 import { megaToRaw, rawToMega } from 'nano-unit-converter';
 import {updatePriceList} from '../api/prices'
-import WASMPoW from '../../libs/wasmpow.js';
 
-//console.log(WASMPoW);
 const acceptBanano = require('@accept-banano/client');
 
 async function paymentSucceeded({amount, state, data}) {
@@ -19,7 +17,7 @@ async function paymentSucceeded({amount, state, data}) {
   console.log("Current difficulty: ",data.difficulty);
   console.log("Before time: ",beforeTimestamp);
   //const cached_work = await nanocurrency.computeWork(data.frontier, ComputeWorkParams = { workThreshold: data.difficulty });
-  //const cached_work = await WASMPoW(data.frontier);
+  
   const cached_work = "";
   const afterTimestamp = Date.now();
   console.log("After time: ",afterTimestamp);
