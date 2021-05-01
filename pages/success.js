@@ -12,9 +12,10 @@ export default function Success() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to the swap!
+          Thanks for using The Nano Swap!
         </h1>
 <h1>We're sending your funds...</h1>
+<Link href="/">Home</Link>
       </main>
 
       <footer className={styles.footer}>
