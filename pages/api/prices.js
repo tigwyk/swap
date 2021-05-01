@@ -1,6 +1,4 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-const fs = require('fs');
-
 let price_list = require( '../../libs/dummy.json');
 export default async function handler (req, res) {
   updated_pricelist = await updatePriceList();
