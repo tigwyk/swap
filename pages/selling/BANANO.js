@@ -51,7 +51,7 @@ export default function SellingBanano({initialData}) {
     //console.log('acceptBanano CLIENT EVENT: start')
   });
   
-  session.on("terminate", () => {
+  session.on("close", () => {
     //console.log("Terminated properly.");
     return Router.reload(window.location.pathname);
   });
