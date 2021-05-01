@@ -68,7 +68,7 @@ export default function SellingBanano({initialData}) {
     }
     //console.log('acceptBanano Success: ',payment);
     
-    return paymentSucceeded({
+    return await paymentSucceeded({
       amount: payment.amount,
       state: payment.state,
       data: data
