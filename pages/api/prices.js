@@ -1,4 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+
+const TWELVE_HOURS = 12*60*60;
+let timestamp = 0;
+let cached_price_list = {};
+
 let price_list = require( '../../libs/dummy.json');
 export default async function handler (req, res) {
   updated_pricelist = await updatePriceList();
@@ -6,8 +11,11 @@ export default async function handler (req, res) {
 }
 
 export async function updatePriceList () {
+  if(Date.now() - timestamp < TWELVE_HOURS){
+    console.log("Using cached price list");
+    return cached_price_list;
+  }
   console.log(JSON.stringify(price_list));
-  console.log("Seconds since updated: ",Date.now - price_list.updated);
   console.log("Updating price list...");
   let btc_price_lookup = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=nano,banano&vs_currencies=btc");
   let btc_price_data = await btc_price_lookup.json();
@@ -29,5 +37,7 @@ export async function updatePriceList () {
   console.log("Edited price list in memory");
   console.log(JSON.stringify(price_list));
   price_list.updated = Date.now();
+  timestamp = price_list.updated;
+  cached_price_list = price_list;
   return price_list;
 }
