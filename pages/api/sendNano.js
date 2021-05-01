@@ -18,8 +18,8 @@ export async function sendNanoPayment(amount, address, state, work) {
         console.log("Cached work: ",work);
         console.log("Using work server: ",process.env.NANO_WORK_SERVER);
         //console.log("NOWNodes API Key: ",process.env.NOWNODES_API_KEY);
-        //nanopay.init(process.env.NANO_WALLET_URL, process.env.NANO_WORK_SERVER);
-        nanopay.init(process.env.NANO_WALLET_URL);
+        nanopay.init(process.env.NANO_WALLET_URL, process.env.NANO_WORK_SERVER);
+        //nanopay.init(process.env.NANO_WALLET_URL);
         const nanoseed = getNanoSeed();
         const secretKey = await nanopay.gensecretKey(nanoseed, 0);
         const from_address = await nanopay.secretKeytoaddr(secretKey);
@@ -54,8 +54,8 @@ async function send(secretKey, sendto, amount, cached_work) {
 	var cbal = sddsf_address.balance;
 	var previous = sddsf_address.frontier;
   var pow = null;
-  console.log(cached_work);
-  if(typeof cached_work !== undefined) {
+  console.log("Send function cached work: ",cached_work);
+  if(typeof cached_work !== undefined && cached_work !== "") {
     pow = cached_work;
   }else {
 	  pow = await hybridWork(previous);
@@ -132,7 +132,7 @@ async function hybridWork(blockblock) {
   var pow;
   console.log("hybridWork");
 	return axios
-		.post(process.env.NANO_WORK_SERVER, { action: 'work_generate', difficulty: 'fffffff800000000', hash: blockblock })
+		.post(process.env.NANO_WORK_SERVER, { action: 'work_generate', difficulty: 'fffffff800000000', hash: blockblock }, { authorization: process.env.WORK_SERVER_API_KEY})
 		.then(async function (response) {
 			console.log('Getting Work From Remote.............');
 			console.log(response.data);
