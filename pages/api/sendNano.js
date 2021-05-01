@@ -54,8 +54,8 @@ async function send(secretKey, sendto, amount, cached_work) {
 	var cbal = sddsf_address.balance;
 	var previous = sddsf_address.frontier;
   var pow = null;
-  console.log(cached_work);
-  if(typeof cached_work !== undefined) {
+  console.log("Send function cached work: ",cached_work);
+  if(typeof cached_work !== undefined && cached_work !== "") {
     pow = cached_work;
   }else {
 	  pow = await hybridWork(previous);
