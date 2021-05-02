@@ -14,7 +14,11 @@ git clone https://github.com/tigwyk/swap.git
 cd swap
 
 yarn
+
+cp example-env-local .env.local
 ```
+
+Make sure to edit your fresh .env.local file as it will be empty, at minimum you'll need to define hotwallet addresses and seeds, accept-nano/accept-banano endpoint URLs, and a work server.
 
 ## Usage
 
