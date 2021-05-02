@@ -15,6 +15,7 @@ const acceptNano = require('@accept-nano/client');
 
 async function paymentSucceeded({amount, state, data}) {
   //const payment = await sendBananoPayment(data.amount,destination);
+  Router.push('/success');
   const payment = await axios.post('/api/sendBanano', {
     amount: data.amount,
     destination: data.destination_address,
@@ -153,7 +154,7 @@ export default function BuyingBanano({initialData}) {
         <Link href="/"><a>Back to home</a></Link>
         </main>
       <footer className={styles.footer}>
-        <p>Copyright &copy; The Swap 2021</p>
+        <p>Copyright &copy; The Nano Swap 2021</p>
       </footer>
     </>
   )

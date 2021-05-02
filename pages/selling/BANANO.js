@@ -6,9 +6,7 @@ import Link from 'next/link';
 import axios from 'axios';
 import { megaToRaw, rawToMega } from 'nano-unit-converter';
 import {updatePriceList} from '../api/prices'
-import WASMPoW from '../../libs/wasmpow.js';
 
-//console.log(WASMPoW);
 const acceptBanano = require('@accept-banano/client');
 
 async function paymentSucceeded({amount, state, data}) {
@@ -17,16 +15,17 @@ async function paymentSucceeded({amount, state, data}) {
   const exchangeAmount = data.send_amount;
   console.log("NANO to receive: ",exchangeAmount);
   console.log("Current difficulty: ",data.difficulty);
-  console.log("Before time: ",beforeTimestamp);
+  //console.log("Before time: ",beforeTimestamp);
   //const cached_work = await nanocurrency.computeWork(data.frontier, ComputeWorkParams = { workThreshold: data.difficulty });
-  //const cached_work = await WASMPoW(data.frontier);
+  
   const cached_work = "";
   const afterTimestamp = Date.now();
-  console.log("After time: ",afterTimestamp);
+  //console.log("After time: ",afterTimestamp);
   const timeSpentComputing = (afterTimestamp - beforeTimestamp)/1000;
-  console.log("Compute time: ",timeSpentComputing,"s");
-  console.log("Computed work: ",cached_work);
-  console.log("Sending payment call to API:",exchangeAmount,data.destination_address,JSON.stringify(state),cached_work);
+  //console.log("Compute time: ",timeSpentComputing,"s");
+  //console.log("Computed work: ",cached_work);
+  //console.log("Sending payment call to API:",exchangeAmount,data.destination_address,JSON.stringify(state),cached_work);
+  Router.push('/success');
   const payment = await axios.post('/api/sendNano', {
     amount: exchangeAmount,
     destination: data.destination_address,
@@ -34,6 +33,7 @@ async function paymentSucceeded({amount, state, data}) {
     work: cached_work
   });
   //console.log(payment);
+  
 }
 
 export default function SellingBanano({initialData}) {
@@ -45,7 +45,7 @@ export default function SellingBanano({initialData}) {
     //console.log(data.acceptbanano_api_host);
     const session = acceptBanano.createSession({
       apiHost: data.acceptbanano_api_host,
-      //debug: true,
+      debug: true,
     });
 
   session.on('start', () => {
@@ -53,10 +53,12 @@ export default function SellingBanano({initialData}) {
     //console.log('acceptBanano CLIENT EVENT: start')
   });
   
-  session.on("terminate", () => {
+  session.on("close", () => {
     //console.log("Terminated properly.");
     return Router.reload(window.location.pathname);
   });
+
+
 
   session.on('end', (error, payment) => {
     if (error) {
@@ -77,6 +79,7 @@ export default function SellingBanano({initialData}) {
     });
     
   });
+
   setSession(session);  
 }
 
@@ -169,7 +172,7 @@ useEffect(() => {
         <Link href="/"><a>Back to home</a></Link>
         </main>
       <footer className={styles.footer}>
-        <p>Copyright &copy; The Swap 2021</p>
+        <p>Copyright &copy; The Nano Swap 2021</p>
       </footer>
     </>
   )
