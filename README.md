@@ -1,7 +1,5 @@
 # The Nano Swap
 
-A NextJS-based atomic swap exchange for [NANO](https://www.nano.org) and [BANANO](https://banano.cc)
-
 _The Nano Swap_ is a NextJS-based atomic swap exchange that helps you trade [NANO](https://www.nano.org) for  [BANANO](https://banano.cc) and vice-versa.
 
 It makes use of the [accept-nano](https://accept-nano.com) libraries for NANO payments as well as the forked [accept-banano](https://github.com/tigwyk/accept-banano) and [accept-banano-client](https://github.com/tigwyk/accept-banano-client) libraries for receiving BANANO payments easily.
