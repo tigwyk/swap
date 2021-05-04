@@ -189,7 +189,7 @@ export async function getStaticProps(context) {
   let initialData = {
     "id":"banano-button",
     "title":"Confirm",
-    "max_banano_transaction_size": MAX_BANANO_TRANS_SIZE,
+    "max_banano_transaction_size": MAX_BANANO_TRANS_SIZE.toFixed(6),
     "receiving_address":"nano_1x9rjf8xnjffznaxd18n8rc1m396ao8ky1uqpmapdzat5npy11if4kuh4ubd",
     "amount":"0.1",
     "destination_address": "",
