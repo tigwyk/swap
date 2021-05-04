@@ -160,7 +160,7 @@ export default function BuyingBanano({initialData}) {
   )
 };
 
-export async function getServerProps(context) {
+export async function getServerSideProps(context) {
   const price_list = await updatePriceList();
   const balance_query = {
     "action": "account_balance",
