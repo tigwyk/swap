@@ -132,8 +132,8 @@ useEffect(() => {
       localData.amount = e.target.value;
     }
     if((localData.amount*data.sell_rate) > ceiling) {
-      e.target.value = ceiling.toFixed(6);
-      localData.amount = ceiling.toFixed(6);
+      e.target.value = (ceiling/sell_rate).toFixed(6);
+      localData.amount = (ceiling/sell_rate).toFixed(6);
     }
     e.target.form.nano_to_receive.placeholder = (localData.amount*(data.sell_rate)).toFixed(6);
     localData.send_amount = e.target.form.nano_to_receive.placeholder;
