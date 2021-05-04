@@ -122,7 +122,7 @@ useEffect(() => {
     //console.log(e.target.form.nano_to_pay.placeholder);
     let localData = data;
     let floatedValue = 0.00;
-    const ceiling = data.max_nano_transaction_sizee;
+    const ceiling = data.max_nano_transaction_size;
     //console.log("Ceiling: ",ceiling);
     if(isNaN(e.target.value)) {
       floatedValue = parseFloat(e.target.value);
