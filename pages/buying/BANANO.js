@@ -127,7 +127,7 @@ export default function BuyingBanano({initialData}) {
           Buy BANANO
         </h3>
         <h4>@ {data.buy_rate} NANO/per</h4>
-        <p>~{(1/data.buy_rate).toFixed(6)} BANANO = 1 NANO</p>
+        <p>1 NANO = ~{(1/data.buy_rate).toFixed(6)} BANANO</p>
         <small>Max. {data.max_banano_transaction_size} BANANO</small>
         <form onSubmit={submitNanoPayment}>
         <div className="input-group">
@@ -179,13 +179,15 @@ export async function getStaticProps(context) {
   //console.log(banano_balance_response);
   let banano_balance = 0;
   if(!isNaN(banano_balance_response.balance) && banano_balance_response.balance > 0) {
+    console.log("Raw banano hotwallet balance: ",banano_balance_response.balance);
     banano_balance = rawToBan(banano_balance_response.balance);
   } else {
     banano_balance = 0;
   }
-  //console.log(banano_balance);
+  console.log("Convert banano balance: ", banano_balance);
   const MAX_BANANO_TRANS_SIZE = banano_balance*0.40;
 
+  console.log("Max Banano Transaction Size in getStaticProps: ",MAX_BANANO_TRANS_SIZE);
   let initialData = {
     "id":"banano-button",
     "title":"Confirm",
