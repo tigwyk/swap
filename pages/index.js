@@ -8,6 +8,7 @@ export default function Home({local_prices,data}) {
       <Head>
         <title>The Nano Swap</title>
         <link rel="icon" href="/favicon.ico" />
+        <script src="//instant.page/5.1.0" type="module" integrity="sha384-by67kQnR+pyfy8yWP4kPO12fHKRLHZPfEsiSXR8u2IKcTdxD805MGUXBzVPnkLHw"></script>
       </Head>
 
       <main className={styles.main}>
