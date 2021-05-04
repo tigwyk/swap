@@ -147,6 +147,7 @@ useEffect(() => {
         </h3>
         <h4>@ {data.sell_rate} NANO</h4>
         <p> ~{(1/data.sell_rate).toFixed(3)} BANANO = 1 NANO</p>
+        <small>Max. {data.max_nano_transaction_size} NANO</small>
         <form onSubmit={submitBananoPayment}>
         <div className="input-group">
             <span className="input-group-text">Receive NANO at:</span>
