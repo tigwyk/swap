@@ -122,7 +122,7 @@ useEffect(() => {
     //console.log(e.target.form.nano_to_pay.placeholder);
     let localData = data;
     let floatedValue = 0.00;
-    const ceiling = data.max_nano_transaction_size/data.sell_rate;
+    const ceiling = data.max_nano_transaction_size;
     //console.log("Ceiling: ",ceiling);
     if(isNaN(e.target.value)) {
       floatedValue = parseFloat(e.target.value);
@@ -131,9 +131,9 @@ useEffect(() => {
     } else {
       localData.amount = e.target.value;
     }
-    if(localData.amount > ceiling) {
-      e.target.value = ceiling.toFixed(6);
-      localData.amount = ceiling.toFixed(6);
+    if((localData.amount*data.sell_rate) > ceiling) {
+      e.target.value = (ceiling/data.sell_rate).toFixed(6);
+      localData.amount = (ceiling/data.sell_rate).toFixed(6);
     }
     e.target.form.nano_to_receive.placeholder = (localData.amount*(data.sell_rate)).toFixed(6);
     localData.send_amount = e.target.form.nano_to_receive.placeholder;
