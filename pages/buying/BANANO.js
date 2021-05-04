@@ -136,7 +136,7 @@ export default function BuyingBanano({initialData}) {
         </div>
         <div className="input-group">
         <span className="input-group-text">BANANO to receive:</span>
-        <input className="form-control" name="coin_amount" placeholder={(1/data.buy_rate).toFixed(2)} onChange={handleAmountChange} />
+        <input className="form-control" name="coin_amount" placeholder={((1/data.buy_rate).toFixed(2) > data.max_banano_transaction_size ? data.max_banano_transaction_size : (1/data.buy_rate).toFixed(2)) } onChange={handleAmountChange} />
         
         </div>
         <div className="input-group">
