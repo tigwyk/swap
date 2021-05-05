@@ -146,7 +146,7 @@ export default function BuyingBanano({initialData}) {
         </div>
         <center>
         <div className="btn-group" role="group" aria-label="Confirm or Cancel">
-          <small>Do NOT send more than the amount displayed during the payment prompt. Any overages will be kept.</small>
+        <p><small>Do NOT send more than the amount displayed during the payment prompt. Any overages will be kept.</small></p>
         <button className="btn btn-primary" type="submit">Confirm</button>
         <button className="btn btn-primary" type="reset">Reset</button>
         </div>
