@@ -180,7 +180,7 @@ useEffect(() => {
   )
 };
 
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
   const previous_block_response = await fetch(process.env.NANO_WALLET_URL, {
     method: 'POST',
     headers: {
