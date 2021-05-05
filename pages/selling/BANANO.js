@@ -13,8 +13,8 @@ async function paymentSucceeded({amount, state, data}) {
   const beforeTimestamp = Date.now();
   var ComputeWorkParams;
   const exchangeAmount = data.send_amount;
-  console.log("NANO to receive: ",exchangeAmount);
-  console.log("Current difficulty: ",data.difficulty);
+  //console.log("NANO to receive: ",exchangeAmount);
+  //console.log("Current difficulty: ",data.difficulty);
   //console.log("Before time: ",beforeTimestamp);
   //const cached_work = await nanocurrency.computeWork(data.frontier, ComputeWorkParams = { workThreshold: data.difficulty });
   
@@ -42,7 +42,6 @@ export default function SellingBanano({initialData}) {
   const [paymentState, setPaymentState] = useState(null);
 
   function acceptBananoPreload(){
-    //console.log(data.acceptbanano_api_host);
     const session = acceptBanano.createSession({
       apiHost: data.acceptbanano_api_host,
       debug: true,
@@ -62,15 +61,14 @@ export default function SellingBanano({initialData}) {
 
   session.on('end', (error, payment) => {
     if (error) {
-      //return BuyingBanano.paymentFailed({ reason: error.reason })
       if(error.reason === "USER_TERMINATED"){
         setSession(null);
-        //console.log("User clicked the X, refreshing...");
+        //User clicked the X, refreshing...
         return Router.reload(window.location.pathname);
       }
       return console.log('acceptBanano Error: ',error.reason);
     }
-    //console.log('acceptBanano Success: ',payment);
+    console.log('acceptBanano Success: ',payment);
     
     return paymentSucceeded({
       amount: payment.amount,
@@ -89,7 +87,7 @@ useEffect(() => {
   });
 
   if (!data.sell_rate) return <div>Loading exchange rates...</div>
-  console.log("Sell rate:", data.sell_rate);
+  //console.log("Sell rate:", data.sell_rate);
 
   const submitBananoPayment = async (event) => {
     event.preventDefault();
@@ -109,28 +107,20 @@ useEffect(() => {
 
   const handleAddressChange = (e) => {
     let localData = data;
-    //console.log(e.target.coin_address_block.value);
     if(nanocurrency.checkAddress(e.target.value)) {
       localData.destination_address = e.target.value;
-      //console.log("Banano address: ",localData.destination_address);
-      
+           
       return setData(localData);
     }
   }
 
   const handleAmountChange = (e) => {
-    //console.log(e.target.form.nano_to_pay.placeholder);
+    
     let localData = data;
     let floatedValue = 0.00;
     const ceiling = data.max_nano_transaction_size;
-    //console.log("Ceiling: ",ceiling);
-    if(isNaN(e.target.value)) {
-      floatedValue = parseFloat(e.target.value);
-      localData.amount = floatedValue;
-      
-    } else {
-      localData.amount = e.target.value;
-    }
+    
+    localData.amount = parseFloat(e.target.value);
     if((localData.amount*data.sell_rate) > ceiling) {
       e.target.value = (ceiling/data.sell_rate).toFixed(6);
       localData.amount = (ceiling/data.sell_rate).toFixed(6);
@@ -194,7 +184,7 @@ export async function getServerSideProps(context) {
     })
   });
   const previous_block = await previous_block_response.json();
-  console.log("Hotwallet frontier: ",previous_block.frontier);
+  //console.log("Hotwallet frontier: ",previous_block.frontier);
 
   const active_difficulty_repsonse = await fetch(process.env.NANO_WALLET_URL, {
     method: 'POST',
@@ -208,7 +198,7 @@ export async function getServerSideProps(context) {
     })
   });
   const active_difficulty = await active_difficulty_repsonse.json();
-  console.log("Current difficulty: ",active_difficulty);
+  //console.log("Current difficulty: ",active_difficulty);
   
   const price_list = await updatePriceList();
   //console.log(process.env.BANANO_HOTWALLET_ACCOUNT_ONE);
@@ -226,11 +216,11 @@ export async function getServerSideProps(context) {
     })
   });
   let nano_balance_response = await nano_balance_lookup.json();
-  //console.log(nano_balance_response);
+  
   let nano_balance = rawToMega(nano_balance_response.balance);
-  console.log("NANO Hotwallet Balance: ",nano_balance);
+  //console.log("NANO Hotwallet Balance: ",nano_balance);
   const MAX_NANO_TRANS_SIZE = nano_balance*0.85;  
-  console.log("MAX NANO TRANS SIZE: ",MAX_NANO_TRANS_SIZE);
+  //console.log("MAX NANO TRANS SIZE: ",MAX_NANO_TRANS_SIZE);
   let initialData = {
     "id":"banano-button",
     "title":"Confirm",
@@ -250,13 +240,7 @@ export async function getServerSideProps(context) {
     "frontier":previous_block.frontier,
     "difficulty":active_difficulty.network_current
     };
-    /*
-  try {
-    initialData["address"] = (nano_address.account != null ? nano_address.account : "nano_1x9rjf8xnjffznaxd18n8rc1m396ao8ky1uqpmapdzat5npy11if4kuh4ubd");
-  } catch (err) {
-    console.error(err);
-  }
-  */
+    
   if (!initialData) {
     return {
       notFound: true,
