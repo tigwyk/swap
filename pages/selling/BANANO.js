@@ -164,8 +164,8 @@ useEffect(() => {
           
         </div>
         <center>
+        <small>Do NOT send more than the amount displayed during the payment prompt. Any overages will be kept.</small>
         <div className="btn-group" role="group" aria-label="Confirm or Cancel">
-        <p><small>Do NOT send more than the amount displayed during the payment prompt. Any overages will be kept.</small></p>
         <button className="btn btn-primary" type="submit">Confirm</button>
         <button className="btn btn-primary" type="reset">Reset</button>
         </div>
