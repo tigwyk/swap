@@ -115,6 +115,8 @@ export default function BuyingBanano({initialData}) {
       localData.amount = e.target.value;
     }
     if(localData.amount > ceiling) {
+      console.log("Amount is larger than ceiling?",localData.amount);
+      console.log("Ceiling: ",ceiling);
       e.target.value = ceiling;
       localData.amount = ceiling;
     }
