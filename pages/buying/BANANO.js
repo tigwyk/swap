@@ -145,7 +145,7 @@ export default function BuyingBanano({initialData}) {
           
         </div>
         <center>
-        <small>Send only the specified amount. Any overages will be kept.</small>
+        <small>Send only the specified amount. Any overages will be kept.</small><br/>
         <div className="btn-group" role="group" aria-label="Confirm or Cancel">
         <button className="btn btn-primary" type="submit">Confirm</button>
         <button className="btn btn-primary" type="reset">Reset</button>
