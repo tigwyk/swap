@@ -164,7 +164,7 @@ useEffect(() => {
           
         </div>
         <center>
-        <small>Send only the specified amount. Any overages will be kept.</small>
+        <small>SEND ONLY THE SPECIFIED AMOUNT. ANY OVERAGES WILL BE CONSIDERED TIPS.</small><br/>
         <div className="btn-group" role="group" aria-label="Confirm or Cancel">
         <button className="btn btn-primary" type="submit">Confirm</button>
         <button className="btn btn-primary" type="reset">Reset</button>
