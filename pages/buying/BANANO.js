@@ -35,21 +35,19 @@ export default function BuyingBanano({initialData}) {
     });
 
   session.on('start', () => {
-    //BuyingBanano.paymentStarted();
-    //console.log('ACCEPTNANO CLIENT EVENT: start')
+    console.log('ACCEPTNANO CLIENT EVENT: start')
   });
   
   session.on('end', (error, payment) => {
     if (error) {
-      //return BuyingBanano.paymentFailed({ reason: error.reason })
       if(error.reason === "USER_TERMINATED"){
         setSession(null);
-        //console.log("User clicked the X, refreshing...");
+        //User clicked the X, refreshing...
         return Router.reload(window.location.pathname);
       }
       return console.log('ACCEPTNANO Error: ',error.reason);
     }
-    //console.log('ACCEPTNANO Success: ',payment);
+    console.log('ACCEPTNANO Success: ',payment);
     //console.log("Payment state: ",payment.state);
     
     return paymentSucceeded({
@@ -63,9 +61,6 @@ export default function BuyingBanano({initialData}) {
   setSession(session);  
 }
 
-//acceptNanoPreload();
-
-
   useEffect(() => {
   if(session === null)
     acceptNanoPreload();
@@ -76,12 +71,11 @@ export default function BuyingBanano({initialData}) {
 
   const submitNanoPayment = async (event) => {
     event.preventDefault();
-    //let dest_address = event.target.coin_address_block.value;
+    
     let requestedAmount = parseFloat(event.target.coin_amount.value);
-    //console.log("Dest address: ",dest_address);
-    //console.log("Requested amount of BANANO: ",requestedAmount);
+
     let amountPay = requestedAmount*data.buy_rate;
-    //console.log("NANO to pay: ",amountPay)
+
     return session.createPayment({
       amount: amountPay,
       currency: "NANO",
@@ -91,31 +85,17 @@ export default function BuyingBanano({initialData}) {
 
   const handleAddressChange = (e) => {
     let localData = data;
-    //console.log(e.target.coin_address_block.value);
     if(bananojs.getBananoAccountValidationInfo(e.target.value).valid) {
-      localData.destination_address = e.target.value;
-      //console.log("Banano address: ",localData.destination_address);
-      
+      localData.destination_address = e.target.value;      
       return setData(localData);
     }
   }
 
   const handleAmountChange = (e) => {
-    //console.log(e.target.form.nano_to_pay.placeholder);
     let localData = data;
     let floatedValue = 0.00;
     console.log("Max banano transaction size in handleAmountChange: ",data.max_banano_transaction_size);
     const ceiling = data.max_banano_transaction_size;
-    /*
-    if(isNaN(e.target.value)) {
-      console.log("Not a number? ",e.target.value);
-      floatedValue = parseFloat(e.target.value);
-      localData.amount = floatedValue;
-    } else {
-      console.log("localData.amount: ",e.target.value);
-      localData.amount = parseFloat(e.target.value);
-    }
-    */
     localData.amount = parseFloat(e.target.value);
     if(localData.amount > ceiling) {
       console.log("Amount is larger than ceiling?",localData.amount);
@@ -184,7 +164,6 @@ export async function getServerSideProps(context) {
     body: JSON.stringify(balance_query)
   });
   let banano_balance_response = await banano_balance_lookup.json();
-  //console.log(banano_balance_response);
   let banano_balance = 0;
   if(!isNaN(banano_balance_response.balance) && banano_balance_response.balance > 0) {
     console.log("Raw banano hotwallet balance: ",banano_balance_response.balance);
