@@ -107,10 +107,11 @@ export default function BuyingBanano({initialData}) {
     console.log("Max banano transaction size in handleAmountChange: ",data.max_banano_transaction_size);
     const ceiling = data.max_banano_transaction_size;
     if(isNaN(e.target.value)) {
+      console.log("Not a number? ",e.target.value);
       floatedValue = parseFloat(e.target.value);
       localData.amount = floatedValue;
-      
     } else {
+      console.log("localData.amount: ",e.target.value);
       localData.amount = e.target.value;
     }
     if(localData.amount > ceiling) {
