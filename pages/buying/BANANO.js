@@ -104,6 +104,7 @@ export default function BuyingBanano({initialData}) {
     //console.log(e.target.form.nano_to_pay.placeholder);
     let localData = data;
     let floatedValue = 0.00;
+    console.log("Max banano transaction size in handleAmountChange: ",data.max_banano_transaction_size);
     const ceiling = data.max_banano_transaction_size;
     if(isNaN(e.target.value)) {
       floatedValue = parseFloat(e.target.value);
