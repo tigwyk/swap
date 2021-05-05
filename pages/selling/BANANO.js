@@ -219,7 +219,7 @@ export async function getServerSideProps(context) {
   
   let nano_balance = rawToMega(nano_balance_response.balance);
   //console.log("NANO Hotwallet Balance: ",nano_balance);
-  const MAX_NANO_TRANS_SIZE = nano_balance*0.85;  
+  const MAX_NANO_TRANS_SIZE = nano_balance*0.40;  
   //console.log("MAX NANO TRANS SIZE: ",MAX_NANO_TRANS_SIZE);
   let initialData = {
     "id":"banano-button",
